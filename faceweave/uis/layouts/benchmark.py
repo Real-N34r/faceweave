@@ -1,13 +1,12 @@
-import multiprocessing
 import gradio
 
-import faceweave.globals
+from faceweave import state_manager
 from faceweave.download import conditional_download
-from faceweave.uis.components import about, frame_processors, frame_processors_options, execution, execution_thread_count, execution_queue_count, memory, benchmark_options, benchmark
+from faceweave.uis.components import about, age_modifier_options, benchmark, benchmark_options, execution, execution_queue_count, execution_thread_count, expression_restorer_options, face_debugger_options, face_editor_options, face_enhancer_options, face_swapper_options, frame_colorizer_options, frame_enhancer_options, lip_syncer_options, memory, processors
 
 
 def pre_check() -> bool:
-	if not faceweave.globals.skip_download:
+	if not state_manager.get_item('skip_download'):
 		conditional_download('.assets/examples',
 		[
 			'https://github.com/facefusion/facefusion-assets/releases/download/examples/source.jpg',
@@ -35,9 +34,25 @@ def render() -> gradio.Blocks:
 				with gradio.Blocks():
 					about.render()
 				with gradio.Blocks():
-					frame_processors.render()
+					processors.render()
 				with gradio.Blocks():
-					frame_processors_options.render()
+					age_modifier_options.render()
+				with gradio.Blocks():
+					expression_restorer_options.render()
+				with gradio.Blocks():
+					face_debugger_options.render()
+				with gradio.Blocks():
+					face_editor_options.render()
+				with gradio.Blocks():
+					face_enhancer_options.render()
+				with gradio.Blocks():
+					face_swapper_options.render()
+				with gradio.Blocks():
+					frame_colorizer_options.render()
+				with gradio.Blocks():
+					frame_enhancer_options.render()
+				with gradio.Blocks():
+					lip_syncer_options.render()
 				with gradio.Blocks():
 					execution.render()
 					execution_thread_count.render()
@@ -53,8 +68,16 @@ def render() -> gradio.Blocks:
 
 
 def listen() -> None:
-	frame_processors.listen()
-	frame_processors_options.listen()
+	processors.listen()
+	age_modifier_options.listen()
+	expression_restorer_options.listen()
+	face_debugger_options.listen()
+	face_editor_options.listen()
+	face_enhancer_options.listen()
+	face_swapper_options.listen()
+	frame_colorizer_options.listen()
+	frame_enhancer_options.listen()
+	lip_syncer_options.listen()
 	execution.listen()
 	execution_thread_count.listen()
 	execution_queue_count.listen()
@@ -63,5 +86,4 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	concurrency_count = min(2, multiprocessing.cpu_count())
-	ui.queue(concurrency_count = concurrency_count).launch(show_api = False, quiet = True)
+	ui.launch(show_api = False, inbrowser = state_manager.get_item('open_browser'))

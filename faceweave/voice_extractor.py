@@ -1,56 +1,66 @@
-from typing import Any, Tuple
 from time import sleep
-import scipy
+from typing import Optional, Tuple
+
 import numpy
-import onnxruntime
+import scipy
 
-import faceweave.globals
-from faceweave import process_manager
-from faceweave.thread_helper import thread_lock, thread_semaphore
-from faceweave.typing import ModelSet, AudioChunk, Audio
-from faceweave.execution import apply_execution_provider_options
-from faceweave.filesystem import resolve_relative_path, is_file
+from faceweave import process_manager, state_manager
 from faceweave.download import conditional_download
+from faceweave.execution import create_inference_pool
+from faceweave.filesystem import is_file, resolve_relative_path
+from faceweave.thread_helper import thread_lock, thread_semaphore
+from faceweave.typing import Audio, AudioChunk, InferencePool, ModelOptions, ModelSet
 
-VOICE_EXTRACTOR = None
-MODELS : ModelSet =\
+INFERENCE_POOL : Optional[InferencePool] = None
+MODEL_SET : ModelSet =\
 {
 	'voice_extractor':
 	{
-		'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models/voice_extractor.onnx',
-		'path': resolve_relative_path('../.assets/models/voice_extractor.onnx')
+		'sources':
+		{
+			'voice_extractor':
+			{
+				'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models/voice_extractor.onnx',
+				'path': resolve_relative_path('../.assets/models/voice_extractor.onnx')
+			}
+		}
 	}
 }
 
 
-def get_voice_extractor() -> Any:
-	global VOICE_EXTRACTOR
+def get_inference_pool() -> InferencePool:
+	global INFERENCE_POOL
 
 	with thread_lock():
 		while process_manager.is_checking():
 			sleep(0.5)
-		if VOICE_EXTRACTOR is None:
-			model_path = MODELS.get('voice_extractor').get('path')
-			VOICE_EXTRACTOR = onnxruntime.InferenceSession(model_path, providers = apply_execution_provider_options(faceweave.globals.execution_providers))
-	return VOICE_EXTRACTOR
+		if INFERENCE_POOL is None:
+			model_sources = get_model_options().get('sources')
+			INFERENCE_POOL = create_inference_pool(model_sources, state_manager.get_item('execution_device_id'), state_manager.get_item('execution_providers'))
+		return INFERENCE_POOL
 
 
-def clear_voice_extractor() -> None:
-	global VOICE_EXTRACTOR
+def clear_inference_pool() -> None:
+	global INFERENCE_POOL
 
-	VOICE_EXTRACTOR = None
+	INFERENCE_POOL = None
+
+
+def get_model_options() -> ModelOptions:
+	return MODEL_SET.get('voice_extractor')
 
 
 def pre_check() -> bool:
 	download_directory_path = resolve_relative_path('../.assets/models')
-	model_url = MODELS.get('voice_extractor').get('url')
-	model_path = MODELS.get('voice_extractor').get('path')
+	model_sources = get_model_options().get('sources')
+	model_urls = [ model_sources.get(model_source).get('url') for model_source in model_sources.keys() ]
+	model_paths = [ model_sources.get(model_source).get('path') for model_source in model_sources.keys() ]
 
-	if not faceweave.globals.skip_download:
+	if not state_manager.get_item('skip_download'):
 		process_manager.check()
-		conditional_download(download_directory_path, [ model_url ])
+		conditional_download(download_directory_path, model_urls)
 		process_manager.end()
-	return is_file(model_path)
+	return all(is_file(model_path) for model_path in model_paths)
 
 
 def batch_extract_voice(audio : Audio, chunk_size : int, step_size : int) -> Audio:
@@ -66,16 +76,18 @@ def batch_extract_voice(audio : Audio, chunk_size : int, step_size : int) -> Aud
 
 
 def extract_voice(temp_audio_chunk : AudioChunk) -> AudioChunk:
-	voice_extractor = get_voice_extractor()
+	voice_extractor = get_inference_pool().get('voice_extractor')
 	chunk_size = 1024 * (voice_extractor.get_inputs()[0].shape[3] - 1)
 	trim_size = 3840
 	temp_audio_chunk, pad_size = prepare_audio_chunk(temp_audio_chunk.T, chunk_size, trim_size)
 	temp_audio_chunk = decompose_audio_chunk(temp_audio_chunk, trim_size)
+
 	with thread_semaphore():
 		temp_audio_chunk = voice_extractor.run(None,
 		{
 			voice_extractor.get_inputs()[0].name: temp_audio_chunk
 		})[0]
+
 	temp_audio_chunk = compose_audio_chunk(temp_audio_chunk, trim_size)
 	temp_audio_chunk = normalize_audio_chunk(temp_audio_chunk, chunk_size, trim_size, pad_size)
 	return temp_audio_chunk
@@ -99,7 +111,8 @@ def prepare_audio_chunk(temp_audio_chunk : AudioChunk, chunk_size : int, trim_si
 def decompose_audio_chunk(temp_audio_chunk : AudioChunk, trim_size : int) -> AudioChunk:
 	frame_size = 7680
 	frame_overlap = 6656
-	voice_extractor_shape = get_voice_extractor().get_inputs()[0].shape
+	voice_extractor = get_inference_pool().get('voice_extractor')
+	voice_extractor_shape = voice_extractor.get_inputs()[0].shape
 	window = scipy.signal.windows.hann(frame_size)
 	temp_audio_chunk = scipy.signal.stft(temp_audio_chunk, nperseg = frame_size, noverlap = frame_overlap, window = window)[2]
 	temp_audio_chunk = numpy.stack((numpy.real(temp_audio_chunk), numpy.imag(temp_audio_chunk)), axis = -1).transpose((0, 3, 1, 2))
@@ -112,7 +125,8 @@ def decompose_audio_chunk(temp_audio_chunk : AudioChunk, trim_size : int) -> Aud
 def compose_audio_chunk(temp_audio_chunk : AudioChunk, trim_size : int) -> AudioChunk:
 	frame_size = 7680
 	frame_overlap = 6656
-	voice_extractor_shape = get_voice_extractor().get_inputs()[0].shape
+	voice_extractor = get_inference_pool().get('voice_extractor')
+	voice_extractor_shape = voice_extractor.get_inputs()[0].shape
 	window = scipy.signal.windows.hann(frame_size)
 	temp_audio_chunk = numpy.pad(temp_audio_chunk, ((0, 0), (0, 0), (0, trim_size + 1 - voice_extractor_shape[2]), (0, 0)))
 	temp_audio_chunk = temp_audio_chunk.reshape(-1, 2, trim_size + 1, voice_extractor_shape[3]).transpose((0, 2, 3, 1))

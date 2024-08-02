@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+
 import pytest
 
 from faceweave import config

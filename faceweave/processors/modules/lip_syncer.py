@@ -1,0 +1,274 @@
+from argparse import ArgumentParser
+from time import sleep
+from typing import List, Optional
+
+import cv2
+import numpy
+
+import faceweave.jobs.job_manager
+import faceweave.jobs.job_store
+import faceweave.processors.core as processors
+from faceweave import config, content_analyser, face_analyser, face_masker, logger, process_manager, state_manager, voice_extractor, wording
+from faceweave.audio import create_empty_audio_frame, get_voice_frame, read_static_voice
+from faceweave.common_helper import get_first
+from faceweave.download import conditional_download, is_download_done
+from faceweave.execution import create_inference_pool
+from faceweave.face_analyser import get_many_faces, get_one_face
+from faceweave.face_helper import create_bounding_box_from_face_landmark_68, paste_back, warp_face_by_bounding_box, warp_face_by_face_landmark_5
+from faceweave.face_masker import create_mouth_mask, create_occlusion_mask, create_static_box_mask
+from faceweave.face_selector import find_similar_faces, sort_and_filter_faces
+from faceweave.face_store import get_reference_faces
+from faceweave.filesystem import filter_audio_paths, has_audio, in_directory, is_file, is_image, is_video, resolve_relative_path, same_file_extension
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.typing import LipSyncerInputs
+from faceweave.program_helper import find_argument_group
+from faceweave.thread_helper import conditional_thread_semaphore, thread_lock
+from faceweave.typing import Args, AudioFrame, Face, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
+from faceweave.vision import read_image, read_static_image, restrict_video_fps, write_image
+
+INFERENCE_POOL : Optional[InferencePool] = None
+NAME = __name__.upper()
+MODEL_SET : ModelSet =\
+{
+	'wav2lip':
+	{
+		'sources':
+		{
+			'lip_syncer':
+			{
+				'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models/wav2lip.onnx',
+				'path': resolve_relative_path('../.assets/models/wav2lip.onnx')
+			}
+		}
+	},
+	'wav2lip_gan':
+	{
+		'sources':
+		{
+			'lip_syncer':
+			{
+				'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models/wav2lip_gan.onnx',
+				'path': resolve_relative_path('../.assets/models/wav2lip_gan.onnx')
+			}
+		}
+	}
+}
+
+
+def get_inference_pool() -> InferencePool:
+	global INFERENCE_POOL
+
+	with thread_lock():
+		while process_manager.is_checking():
+			sleep(0.5)
+		if INFERENCE_POOL is None:
+			module_sources = get_model_options().get('sources')
+			INFERENCE_POOL = create_inference_pool(module_sources, state_manager.get_item('execution_device_id'), state_manager.get_item('execution_providers'))
+	return INFERENCE_POOL
+
+
+def clear_inference_pool() -> None:
+	global INFERENCE_POOL
+
+	INFERENCE_POOL = None
+
+
+def get_model_options() -> ModelOptions:
+	return MODEL_SET[state_manager.get_item('lip_syncer_model')]
+
+
+def register_args(program : ArgumentParser) -> None:
+	group_processors = find_argument_group(program, 'processors')
+	if group_processors:
+		group_processors.add_argument('--lip-syncer-model', help = wording.get('help.lip_syncer_model'), default = config.get_str_value('processors.lip_syncer_model', 'wav2lip_gan'), choices = processors_choices.lip_syncer_models)
+		faceweave.jobs.job_store.register_step_keys([ 'lip_syncer_model' ])
+
+
+def apply_args(args : Args) -> None:
+	state_manager.init_item('lip_syncer_model', args.get('lip_syncer_model'))
+
+
+def pre_check() -> bool:
+	download_directory_path = resolve_relative_path('../.assets/models')
+	model_sources = get_model_options().get('sources')
+	model_urls = [ model_sources.get(model_source).get('url') for model_source in model_sources.keys() ]
+	model_paths = [ model_sources.get(model_source).get('path') for model_source in model_sources.keys() ]
+
+	if not state_manager.get_item('skip_download'):
+		process_manager.check()
+		conditional_download(download_directory_path, model_urls)
+		process_manager.end()
+	return all(is_file(model_path) for model_path in model_paths)
+
+
+def post_check() -> bool:
+	model_sources = get_model_options().get('sources')
+	model_urls = [ model_sources.get(model_source).get('url') for model_source in model_sources.keys() ]
+	model_paths = [ model_sources.get(model_source).get('path') for model_source in model_sources.keys() ]
+
+	if not state_manager.get_item('skip_download'):
+		for model_url, model_path in zip(model_urls, model_paths):
+			if not is_download_done(model_url, model_path):
+				logger.error(wording.get('model_download_not_done') + wording.get('exclamation_mark'), NAME)
+				return False
+	for model_path in model_paths:
+		if not is_file(model_path):
+			logger.error(wording.get('model_file_not_present') + wording.get('exclamation_mark'), NAME)
+			return False
+	return True
+
+
+def pre_process(mode : ProcessMode) -> bool:
+	if not has_audio(state_manager.get_item('source_paths')):
+		logger.error(wording.get('choose_audio_source') + wording.get('exclamation_mark'), NAME)
+		return False
+	if mode in [ 'output', 'preview' ] and not is_image(state_manager.get_item('target_path')) and not is_video(state_manager.get_item('target_path')):
+		logger.error(wording.get('choose_image_or_video_target') + wording.get('exclamation_mark'), NAME)
+		return False
+	if mode == 'output' and not in_directory(state_manager.get_item('output_path')):
+		logger.error(wording.get('specify_image_or_video_output') + wording.get('exclamation_mark'), NAME)
+		return False
+	if mode == 'output' and not same_file_extension([ state_manager.get_item('target_path'), state_manager.get_item('output_path') ]):
+		logger.error(wording.get('match_target_and_output_extension') + wording.get('exclamation_mark'), NAME)
+		return False
+	return True
+
+
+def post_process() -> None:
+	read_static_image.cache_clear()
+	read_static_voice.cache_clear()
+	if state_manager.get_item('video_memory_strategy') in [ 'strict', 'moderate' ]:
+		clear_inference_pool()
+	if state_manager.get_item('video_memory_strategy') == 'strict':
+		content_analyser.clear_inference_pool()
+		face_analyser.clear_inference_pool()
+		face_masker.clear_inference_pool()
+		voice_extractor.clear_inference_pool()
+
+
+def sync_lip(target_face : Face, temp_audio_frame : AudioFrame, temp_vision_frame : VisionFrame) -> VisionFrame:
+	lip_syncer = get_inference_pool().get('lip_syncer')
+	temp_audio_frame = prepare_audio_frame(temp_audio_frame)
+	crop_vision_frame, affine_matrix = warp_face_by_face_landmark_5(temp_vision_frame, target_face.landmark_set.get('5/68'), 'ffhq_512', (512, 512))
+	face_landmark_68 = cv2.transform(target_face.landmark_set.get('68').reshape(1, -1, 2), affine_matrix).reshape(-1, 2)
+	bounding_box = create_bounding_box_from_face_landmark_68(face_landmark_68)
+	bounding_box[1] -= numpy.abs(bounding_box[3] - bounding_box[1]) * 0.125
+	mouth_mask = create_mouth_mask(face_landmark_68)
+	box_mask = create_static_box_mask(crop_vision_frame.shape[:2][::-1], state_manager.get_item('face_mask_blur'), state_manager.get_item('face_mask_padding'))
+	crop_masks =\
+	[
+		mouth_mask,
+		box_mask
+	]
+
+	if 'occlusion' in state_manager.get_item('face_mask_types'):
+		occlusion_mask = create_occlusion_mask(crop_vision_frame)
+		crop_masks.append(occlusion_mask)
+	close_vision_frame, close_matrix = warp_face_by_bounding_box(crop_vision_frame, bounding_box, (96, 96))
+	close_vision_frame = prepare_crop_frame(close_vision_frame)
+
+	with conditional_thread_semaphore():
+		close_vision_frame = lip_syncer.run(None,
+		{
+			'source': temp_audio_frame,
+			'target': close_vision_frame
+		})[0]
+
+	crop_vision_frame = normalize_crop_frame(close_vision_frame)
+	crop_vision_frame = cv2.warpAffine(crop_vision_frame, cv2.invertAffineTransform(close_matrix), (512, 512), borderMode = cv2.BORDER_REPLICATE)
+	crop_mask = numpy.minimum.reduce(crop_masks)
+	paste_vision_frame = paste_back(temp_vision_frame, crop_vision_frame, crop_mask, affine_matrix)
+	return paste_vision_frame
+
+
+def prepare_audio_frame(temp_audio_frame : AudioFrame) -> AudioFrame:
+	temp_audio_frame = numpy.maximum(numpy.exp(-5 * numpy.log(10)), temp_audio_frame)
+	temp_audio_frame = numpy.log10(temp_audio_frame) * 1.6 + 3.2
+	temp_audio_frame = temp_audio_frame.clip(-4, 4).astype(numpy.float32)
+	temp_audio_frame = numpy.expand_dims(temp_audio_frame, axis = (0, 1))
+	return temp_audio_frame
+
+
+def prepare_crop_frame(crop_vision_frame : VisionFrame) -> VisionFrame:
+	crop_vision_frame = numpy.expand_dims(crop_vision_frame, axis = 0)
+	prepare_vision_frame = crop_vision_frame.copy()
+	prepare_vision_frame[:, 48:] = 0
+	crop_vision_frame = numpy.concatenate((prepare_vision_frame, crop_vision_frame), axis = 3)
+	crop_vision_frame = crop_vision_frame.transpose(0, 3, 1, 2).astype('float32') / 255.0
+	return crop_vision_frame
+
+
+def normalize_crop_frame(crop_vision_frame : VisionFrame) -> VisionFrame:
+	crop_vision_frame = crop_vision_frame[0].transpose(1, 2, 0)
+	crop_vision_frame = crop_vision_frame.clip(0, 1) * 255
+	crop_vision_frame = crop_vision_frame.astype(numpy.uint8)
+	return crop_vision_frame
+
+
+def get_reference_frame(source_face : Face, target_face : Face, temp_vision_frame : VisionFrame) -> VisionFrame:
+	pass
+
+
+def process_frame(inputs : LipSyncerInputs) -> VisionFrame:
+	reference_faces = inputs.get('reference_faces')
+	source_audio_frame = inputs.get('source_audio_frame')
+	target_vision_frame = inputs.get('target_vision_frame')
+	many_faces = sort_and_filter_faces(get_many_faces([ target_vision_frame ]))
+
+	if state_manager.get_item('face_selector_mode') == 'many':
+		if many_faces:
+			for target_face in many_faces:
+				target_vision_frame = sync_lip(target_face, source_audio_frame, target_vision_frame)
+	if state_manager.get_item('face_selector_mode') == 'one':
+		target_face = get_one_face(many_faces)
+		if target_face:
+			target_vision_frame = sync_lip(target_face, source_audio_frame, target_vision_frame)
+	if state_manager.get_item('face_selector_mode') == 'reference':
+		similar_faces = find_similar_faces(many_faces, reference_faces, state_manager.get_item('reference_face_distance'))
+		if similar_faces:
+			for similar_face in similar_faces:
+				target_vision_frame = sync_lip(similar_face, source_audio_frame, target_vision_frame)
+	return target_vision_frame
+
+
+def process_frames(source_paths : List[str], queue_payloads : List[QueuePayload], update_progress : UpdateProgress) -> None:
+	reference_faces = get_reference_faces() if 'reference' in state_manager.get_item('face_selector_mode') else None
+	source_audio_path = get_first(filter_audio_paths(source_paths))
+	temp_video_fps = restrict_video_fps(state_manager.get_item('target_path'), state_manager.get_item('output_video_fps'))
+
+	for queue_payload in process_manager.manage(queue_payloads):
+		frame_number = queue_payload.get('frame_number')
+		target_vision_path = queue_payload.get('frame_path')
+		source_audio_frame = get_voice_frame(source_audio_path, temp_video_fps, frame_number)
+		if not numpy.any(source_audio_frame):
+			source_audio_frame = create_empty_audio_frame()
+		target_vision_frame = read_image(target_vision_path)
+		output_vision_frame = process_frame(
+		{
+			'reference_faces': reference_faces,
+			'source_audio_frame': source_audio_frame,
+			'target_vision_frame': target_vision_frame
+		})
+		write_image(target_vision_path, output_vision_frame)
+		update_progress(1)
+
+
+def process_image(source_paths : List[str], target_path : str, output_path : str) -> None:
+	reference_faces = get_reference_faces() if 'reference' in state_manager.get_item('face_selector_mode') else None
+	source_audio_frame = create_empty_audio_frame()
+	target_vision_frame = read_static_image(target_path)
+	output_vision_frame = process_frame(
+	{
+		'reference_faces': reference_faces,
+		'source_audio_frame': source_audio_frame,
+		'target_vision_frame': target_vision_frame
+	})
+	write_image(output_path, output_vision_frame)
+
+
+def process_video(source_paths : List[str], temp_frame_paths : List[str]) -> None:
+	source_audio_paths = filter_audio_paths(state_manager.get_item('source_paths'))
+	temp_video_fps = restrict_video_fps(state_manager.get_item('target_path'), state_manager.get_item('output_video_fps'))
+	for source_audio_path in source_audio_paths:
+		read_static_voice(source_audio_path, temp_video_fps)
+	processors.multi_process_frames(source_paths, temp_frame_paths, process_frames)

@@ -1,62 +1,92 @@
-from typing import List, Optional, Tuple, Any, Dict
+from typing import List, Optional, Tuple
 
 import gradio
 
-import faceweave.globals
 import faceweave.choices
-from faceweave import wording
-from faceweave.face_store import clear_static_faces, clear_reference_faces
-from faceweave.vision import get_video_frame, read_static_image, normalize_frame_color
-from faceweave.filesystem import is_image, is_video
+from faceweave import state_manager, wording
 from faceweave.face_analyser import get_many_faces
-from faceweave.typing import VisionFrame, FaceSelectorMode
+from faceweave.face_selector import sort_and_filter_faces
+from faceweave.face_store import clear_reference_faces, clear_static_faces
+from faceweave.filesystem import is_image, is_video
+from faceweave.typing import FaceSelectorAge, FaceSelectorGender, FaceSelectorMode, FaceSelectorOrder, VisionFrame
 from faceweave.uis.core import get_ui_component, get_ui_components, register_ui_component
+from faceweave.uis.typing import ComponentOptions
+from faceweave.uis.ui_helper import convert_str_none
+from faceweave.vision import get_video_frame, normalize_frame_color, read_static_image
 
 FACE_SELECTOR_MODE_DROPDOWN : Optional[gradio.Dropdown] = None
+FACE_SELECTOR_ORDER_DROPDOWN : Optional[gradio.Dropdown] = None
+FACE_SELECTOR_AGE_DROPDOWN : Optional[gradio.Dropdown] = None
+FACE_SELECTOR_GENDER_DROPDOWN : Optional[gradio.Dropdown] = None
 REFERENCE_FACE_POSITION_GALLERY : Optional[gradio.Gallery] = None
 REFERENCE_FACE_DISTANCE_SLIDER : Optional[gradio.Slider] = None
 
 
 def render() -> None:
 	global FACE_SELECTOR_MODE_DROPDOWN
+	global FACE_SELECTOR_ORDER_DROPDOWN
+	global FACE_SELECTOR_AGE_DROPDOWN
+	global FACE_SELECTOR_GENDER_DROPDOWN
 	global REFERENCE_FACE_POSITION_GALLERY
 	global REFERENCE_FACE_DISTANCE_SLIDER
 
-	reference_face_gallery_args : Dict[str, Any] =\
+	reference_face_gallery_options : ComponentOptions =\
 	{
 		'label': wording.get('uis.reference_face_gallery'),
 		'object_fit': 'cover',
 		'columns': 8,
 		'allow_preview': False,
-		'visible': 'reference' in faceweave.globals.face_selector_mode
+		'visible': 'reference' in state_manager.get_item('face_selector_mode')
 	}
-	if is_image(faceweave.globals.target_path):
-		reference_frame = read_static_image(faceweave.globals.target_path)
-		reference_face_gallery_args['value'] = extract_gallery_frames(reference_frame)
-	if is_video(faceweave.globals.target_path):
-		reference_frame = get_video_frame(faceweave.globals.target_path, faceweave.globals.reference_frame_number)
-		reference_face_gallery_args['value'] = extract_gallery_frames(reference_frame)
+	if is_image(state_manager.get_item('target_path')):
+		reference_frame = read_static_image(state_manager.get_item('target_path'))
+		reference_face_gallery_options['value'] = extract_gallery_frames(reference_frame)
+	if is_video(state_manager.get_item('target_path')):
+		reference_frame = get_video_frame(state_manager.get_item('target_path'), state_manager.get_item('reference_frame_number'))
+		reference_face_gallery_options['value'] = extract_gallery_frames(reference_frame)
 	FACE_SELECTOR_MODE_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.face_selector_mode_dropdown'),
 		choices = faceweave.choices.face_selector_modes,
-		value = faceweave.globals.face_selector_mode
+		value = state_manager.get_item('face_selector_mode')
 	)
-	REFERENCE_FACE_POSITION_GALLERY = gradio.Gallery(**reference_face_gallery_args)
+	REFERENCE_FACE_POSITION_GALLERY = gradio.Gallery(**reference_face_gallery_options)
+	with gradio.Row():
+		FACE_SELECTOR_ORDER_DROPDOWN = gradio.Dropdown(
+			label = wording.get('uis.face_selector_order_dropdown'),
+			choices = faceweave.choices.face_selector_orders,
+			value = state_manager.get_item('face_selector_order')
+		)
+		FACE_SELECTOR_AGE_DROPDOWN = gradio.Dropdown(
+			label = wording.get('uis.face_selector_age_dropdown'),
+			choices = [ 'none' ] + faceweave.choices.face_selector_ages,
+			value = state_manager.get_item('face_selector_age') or 'none'
+		)
+		FACE_SELECTOR_GENDER_DROPDOWN = gradio.Dropdown(
+			label = wording.get('uis.face_selector_gender_dropdown'),
+			choices = [ 'none' ] + faceweave.choices.face_selector_genders,
+			value = state_manager.get_item('face_selector_gender') or 'none'
+		)
 	REFERENCE_FACE_DISTANCE_SLIDER = gradio.Slider(
 		label = wording.get('uis.reference_face_distance_slider'),
-		value = faceweave.globals.reference_face_distance,
+		value = state_manager.get_item('reference_face_distance'),
 		step = faceweave.choices.reference_face_distance_range[1] - faceweave.choices.reference_face_distance_range[0],
 		minimum = faceweave.choices.reference_face_distance_range[0],
 		maximum = faceweave.choices.reference_face_distance_range[-1],
-		visible = 'reference' in faceweave.globals.face_selector_mode
+		visible = 'reference' in state_manager.get_item('face_selector_mode')
 	)
 	register_ui_component('face_selector_mode_dropdown', FACE_SELECTOR_MODE_DROPDOWN)
+	register_ui_component('face_selector_order_dropdown', FACE_SELECTOR_ORDER_DROPDOWN)
+	register_ui_component('face_selector_age_dropdown', FACE_SELECTOR_AGE_DROPDOWN)
+	register_ui_component('face_selector_gender_dropdown', FACE_SELECTOR_GENDER_DROPDOWN)
 	register_ui_component('reference_face_position_gallery', REFERENCE_FACE_POSITION_GALLERY)
 	register_ui_component('reference_face_distance_slider', REFERENCE_FACE_DISTANCE_SLIDER)
 
 
 def listen() -> None:
 	FACE_SELECTOR_MODE_DROPDOWN.change(update_face_selector_mode, inputs = FACE_SELECTOR_MODE_DROPDOWN, outputs = [ REFERENCE_FACE_POSITION_GALLERY, REFERENCE_FACE_DISTANCE_SLIDER ])
+	FACE_SELECTOR_ORDER_DROPDOWN.change(update_face_selector_order, inputs = FACE_SELECTOR_ORDER_DROPDOWN, outputs = REFERENCE_FACE_POSITION_GALLERY)
+	FACE_SELECTOR_AGE_DROPDOWN.change(update_face_selector_age, inputs = FACE_SELECTOR_AGE_DROPDOWN, outputs = REFERENCE_FACE_POSITION_GALLERY)
+	FACE_SELECTOR_GENDER_DROPDOWN.change(update_face_selector_gender, inputs = FACE_SELECTOR_GENDER_DROPDOWN, outputs = REFERENCE_FACE_POSITION_GALLERY)
 	REFERENCE_FACE_POSITION_GALLERY.select(clear_and_update_reference_face_position)
 	REFERENCE_FACE_DISTANCE_SLIDER.release(update_reference_face_distance, inputs = REFERENCE_FACE_DISTANCE_SLIDER)
 
@@ -71,16 +101,9 @@ def listen() -> None:
 
 	for ui_component in get_ui_components(
 	[
-		'face_analyser_order_dropdown',
-		'face_analyser_age_dropdown',
-		'face_analyser_gender_dropdown'
-	]):
-		ui_component.change(update_reference_position_gallery, outputs = REFERENCE_FACE_POSITION_GALLERY)
-
-	for ui_component in get_ui_components(
-	[
 		'face_detector_model_dropdown',
-		'face_detector_size_dropdown'
+		'face_detector_size_dropdown',
+		'face_detector_angles_checkbox_group'
 	]):
 		ui_component.change(clear_and_update_reference_position_gallery, outputs = REFERENCE_FACE_POSITION_GALLERY)
 
@@ -89,24 +112,37 @@ def listen() -> None:
 		'face_detector_score_slider',
 		'face_landmarker_score_slider'
 	]):
-		ui_component.release(clear_and_update_reference_position_gallery, outputs=REFERENCE_FACE_POSITION_GALLERY)
+		ui_component.release(clear_and_update_reference_position_gallery, outputs = REFERENCE_FACE_POSITION_GALLERY)
 
 	preview_frame_slider = get_ui_component('preview_frame_slider')
 	if preview_frame_slider:
-		preview_frame_slider.change(update_reference_frame_number, inputs = preview_frame_slider)
+		preview_frame_slider.release(update_reference_frame_number, inputs = preview_frame_slider)
 		preview_frame_slider.release(update_reference_position_gallery, outputs = REFERENCE_FACE_POSITION_GALLERY)
 
 
 def update_face_selector_mode(face_selector_mode : FaceSelectorMode) -> Tuple[gradio.Gallery, gradio.Slider]:
+	state_manager.set_item('face_selector_mode', face_selector_mode)
 	if face_selector_mode == 'many':
-		faceweave.globals.face_selector_mode = face_selector_mode
 		return gradio.Gallery(visible = False), gradio.Slider(visible = False)
 	if face_selector_mode == 'one':
-		faceweave.globals.face_selector_mode = face_selector_mode
 		return gradio.Gallery(visible = False), gradio.Slider(visible = False)
 	if face_selector_mode == 'reference':
-		faceweave.globals.face_selector_mode = face_selector_mode
 		return gradio.Gallery(visible = True), gradio.Slider(visible = True)
+
+
+def update_face_selector_order(face_analyser_order : FaceSelectorOrder) -> gradio.Gallery:
+	state_manager.set_item('face_selector_order', convert_str_none(face_analyser_order))
+	return update_reference_position_gallery()
+
+
+def update_face_selector_age(face_selector_age : FaceSelectorAge) -> gradio.Gallery:
+	state_manager.set_item('face_selector_age', convert_str_none(face_selector_age))
+	return update_reference_position_gallery()
+
+
+def update_face_selector_gender(face_analyser_gender : FaceSelectorGender) -> gradio.Gallery:
+	state_manager.set_item('face_selector_gender', convert_str_none(face_analyser_gender))
+	return update_reference_position_gallery()
 
 
 def clear_and_update_reference_face_position(event : gradio.SelectData) -> gradio.Gallery:
@@ -117,15 +153,15 @@ def clear_and_update_reference_face_position(event : gradio.SelectData) -> gradi
 
 
 def update_reference_face_position(reference_face_position : int = 0) -> None:
-	faceweave.globals.reference_face_position = reference_face_position
+	state_manager.set_item('reference_face_position', reference_face_position)
 
 
 def update_reference_face_distance(reference_face_distance : float) -> None:
-	faceweave.globals.reference_face_distance = reference_face_distance
+	state_manager.set_item('reference_face_distance', reference_face_distance)
 
 
 def update_reference_frame_number(reference_frame_number : int) -> None:
-	faceweave.globals.reference_frame_number = reference_frame_number
+	state_manager.set_item('reference_frame_number', reference_frame_number)
 
 
 def clear_and_update_reference_position_gallery() -> gradio.Gallery:
@@ -136,11 +172,11 @@ def clear_and_update_reference_position_gallery() -> gradio.Gallery:
 
 def update_reference_position_gallery() -> gradio.Gallery:
 	gallery_vision_frames = []
-	if is_image(faceweave.globals.target_path):
-		temp_vision_frame = read_static_image(faceweave.globals.target_path)
+	if is_image(state_manager.get_item('target_path')):
+		temp_vision_frame = read_static_image(state_manager.get_item('target_path'))
 		gallery_vision_frames = extract_gallery_frames(temp_vision_frame)
-	if is_video(faceweave.globals.target_path):
-		temp_vision_frame = get_video_frame(faceweave.globals.target_path, faceweave.globals.reference_frame_number)
+	if is_video(state_manager.get_item('target_path')):
+		temp_vision_frame = get_video_frame(state_manager.get_item('target_path'), state_manager.get_item('reference_frame_number'))
 		gallery_vision_frames = extract_gallery_frames(temp_vision_frame)
 	if gallery_vision_frames:
 		return gradio.Gallery(value = gallery_vision_frames)
@@ -149,7 +185,7 @@ def update_reference_position_gallery() -> gradio.Gallery:
 
 def extract_gallery_frames(temp_vision_frame : VisionFrame) -> List[VisionFrame]:
 	gallery_vision_frames = []
-	faces = get_many_faces(temp_vision_frame)
+	faces = sort_and_filter_faces(get_many_faces([ temp_vision_frame ]))
 
 	for face in faces:
 		start_x, start_y, end_x, end_y = map(int, face.bounding_box)

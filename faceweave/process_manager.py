@@ -1,6 +1,6 @@
 from typing import Generator, List
 
-from faceweave.typing import QueuePayload, ProcessState
+from faceweave.typing import ProcessState, QueuePayload
 
 PROCESS_STATE : ProcessState = 'pending'
 
