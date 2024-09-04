@@ -108,4 +108,4 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	ui.launch(show_api = False, inbrowser = state_manager.get_item('open_browser'))
+	ui.launch(show_api = False, quiet = True, share=True, inbrowser = state_manager.get_item('open_browser'))
