@@ -1,9 +1,9 @@
-from typing import Optional, List
+from typing import List, Optional
+
 import gradio
 
-import faceweave.globals
-from faceweave import wording
-from faceweave.uis import choices as uis_choices
+from facewaeve import state_manager, wording
+from facewaeve.uis import choices as uis_choices
 
 COMMON_OPTIONS_CHECKBOX_GROUP : Optional[gradio.Checkboxgroup] = None
 
@@ -11,19 +11,19 @@ COMMON_OPTIONS_CHECKBOX_GROUP : Optional[gradio.Checkboxgroup] = None
 def render() -> None:
 	global COMMON_OPTIONS_CHECKBOX_GROUP
 
-	value = []
-	if faceweave.globals.keep_temp:
-		value.append('keep-temp')
-	if faceweave.globals.skip_audio:
-		value.append('skip-audio')
-	if faceweave.globals.skip_download:
-		value.append('skip-download')
-	if faceweave.globals.nsfw:
-		value.append('nsfw')
+	common_options = []
+
+	if state_manager.get_item('skip_download'):
+		common_options.append('skip-download')
+	if state_manager.get_item('keep_temp'):
+		common_options.append('keep-temp')
+	if state_manager.get_item('skip_audio'):
+		common_options.append('skip-audio')
+
 	COMMON_OPTIONS_CHECKBOX_GROUP = gradio.Checkboxgroup(
 		label = wording.get('uis.common_options_checkbox_group'),
 		choices = uis_choices.common_options,
-		value = value
+		value = common_options
 	)
 
 
@@ -32,7 +32,9 @@ def listen() -> None:
 
 
 def update(common_options : List[str]) -> None:
-	faceweave.globals.keep_temp = 'keep-temp' in common_options
-	faceweave.globals.skip_audio = 'skip-audio' in common_options
-	faceweave.globals.skip_download = 'skip-download' in common_options
-	faceweave.globals.nsfw = 'nsfw' in common_options
+	skip_temp = 'skip-download' in common_options
+	keep_temp = 'keep-temp' in common_options
+	skip_audio = 'skip-audio' in common_options
+	state_manager.set_item('skip_download', skip_temp)
+	state_manager.set_item('keep_temp', keep_temp)
+	state_manager.set_item('skip_audio', skip_audio)

@@ -1,12 +1,12 @@
 from typing import Optional
+
 import gradio
 
-import faceweave.globals
-import faceweave.choices
-from faceweave import wording
-from faceweave.typing import TempFrameFormat
-from faceweave.filesystem import is_video
-from faceweave.uis.core import get_ui_component
+import facewaeve.choices
+from facewaeve import state_manager, wording
+from facewaeve.filesystem import is_video
+from facewaeve.typing import TempFrameFormat
+from facewaeve.uis.core import get_ui_component
 
 TEMP_FRAME_FORMAT_DROPDOWN : Optional[gradio.Dropdown] = None
 
@@ -16,14 +16,15 @@ def render() -> None:
 
 	TEMP_FRAME_FORMAT_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.temp_frame_format_dropdown'),
-		choices = faceweave.choices.temp_frame_formats,
-		value = faceweave.globals.temp_frame_format,
-		visible = is_video(faceweave.globals.target_path)
+		choices = facewaeve.choices.temp_frame_formats,
+		value = state_manager.get_item('temp_frame_format'),
+		visible = is_video(state_manager.get_item('target_path'))
 	)
 
 
 def listen() -> None:
 	TEMP_FRAME_FORMAT_DROPDOWN.change(update_temp_frame_format, inputs = TEMP_FRAME_FORMAT_DROPDOWN)
+
 	target_video = get_ui_component('target_video')
 	if target_video:
 		for method in [ 'upload', 'change', 'clear' ]:
@@ -31,11 +32,11 @@ def listen() -> None:
 
 
 def remote_update() -> gradio.Dropdown:
-	if is_video(faceweave.globals.target_path):
+	if is_video(state_manager.get_item('target_path')):
 		return gradio.Dropdown(visible = True)
 	return gradio.Dropdown(visible = False)
 
 
 def update_temp_frame_format(temp_frame_format : TempFrameFormat) -> None:
-	faceweave.globals.temp_frame_format = temp_frame_format
+	state_manager.set_item('temp_frame_format', temp_frame_format)
 

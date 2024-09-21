@@ -1,7 +1,8 @@
 from configparser import ConfigParser
+
 import pytest
 
-from faceweave import config
+from facewaeve import config
 
 
 @pytest.fixture(scope = 'module', autouse = True)

@@ -1,9 +1,8 @@
-import platform
-
-from faceweave.memory import limit_system_memory
+from facewaeve.common_helper import is_linux, is_macos
+from facewaeve.memory import limit_system_memory
 
 
 def test_limit_system_memory() -> None:
 	assert limit_system_memory(4) is True
-	if platform.system().lower() == 'darwin' or platform.system().lower() == 'linux':
+	if is_linux() or is_macos():
 		assert limit_system_memory(1024) is False

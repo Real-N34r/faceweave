@@ -1,14 +1,19 @@
-from typing import Optional, List
 import hashlib
+from typing import List, Optional
+
 import numpy
 
-from faceweave.typing import VisionFrame, Face, FaceStore, FaceSet
+from facewaeve.typing import Face, FaceSet, FaceStore, VisionFrame
 
-FACE_STORE: FaceStore =\
+FACE_STORE : FaceStore =\
 {
 	'static_faces': {},
 	'reference_faces': {}
 }
+
+
+def get_face_store() -> FaceStore:
+	return FACE_STORE
 
 
 def get_static_faces(vision_frame : VisionFrame) -> Optional[List[Face]]:

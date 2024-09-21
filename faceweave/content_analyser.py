@@ -1,27 +1,38 @@
-from typing import Any
 from functools import lru_cache
-from time import sleep
+
 import cv2
 import numpy
-import onnxruntime
 from tqdm import tqdm
 
-import faceweave.globals
-from faceweave import process_manager, wording
-from faceweave.thread_helper import thread_lock, conditional_thread_semaphore
-from faceweave.typing import VisionFrame, ModelSet, Fps
-from faceweave.execution import apply_execution_provider_options
-from faceweave.vision import get_video_frame, count_video_frame_total, read_image, detect_video_fps
-from faceweave.filesystem import resolve_relative_path, is_file
-from faceweave.download import conditional_download
+from facewaeve import inference_manager, state_manager, wording
+from facewaeve.download import conditional_download_hashes, conditional_download_sources
+from facewaeve.filesystem import resolve_relative_path
+from facewaeve.thread_helper import conditional_thread_semaphore
+from facewaeve.typing import Fps, InferencePool, ModelOptions, ModelSet, VisionFrame
+from facewaeve.vision import count_video_frame_total, detect_video_fps, get_video_frame, read_image
 
-CONTENT_ANALYSER = None
-MODELS : ModelSet =\
+MODEL_SET : ModelSet =\
 {
 	'open_nsfw':
 	{
-		'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models/open_nsfw.onnx',
-		'path': resolve_relative_path('../.assets/models/open_nsfw.onnx')
+		'hashes':
+		{
+			'content_analyser':
+			{
+				'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models-3.0.0/open_nsfw.hash',
+				'path': resolve_relative_path('../.assets/models/open_nsfw.hash')
+			}
+		},
+		'sources':
+		{
+			'content_analyser':
+			{
+				'url': 'https://github.com/facefusion/facefusion-assets/releases/download/models-3.0.0/open_nsfw.onnx',
+				'path': resolve_relative_path('../.assets/models/open_nsfw.onnx')
+			}
+		},
+		'size': (224, 224),
+		'mean': [ 104, 117, 123 ]
 	}
 }
 PROBABILITY_LIMIT = 0.80
@@ -29,34 +40,25 @@ RATE_LIMIT = 10
 STREAM_COUNTER = 0
 
 
-def get_content_analyser() -> Any:
-	global CONTENT_ANALYSER
-
-	with thread_lock():
-		while process_manager.is_checking():
-			sleep(0.5)
-		if CONTENT_ANALYSER is None:
-			model_path = MODELS.get('open_nsfw').get('path')
-			CONTENT_ANALYSER = onnxruntime.InferenceSession(model_path, providers = apply_execution_provider_options(faceweave.globals.execution_providers))
-	return CONTENT_ANALYSER
+def get_inference_pool() -> InferencePool:
+	model_sources = get_model_options().get('sources')
+	return inference_manager.get_inference_pool(__name__, model_sources)
 
 
-def clear_content_analyser() -> None:
-	global CONTENT_ANALYSER
+def clear_inference_pool() -> None:
+	inference_manager.clear_inference_pool(__name__)
 
-	CONTENT_ANALYSER = None
+
+def get_model_options() -> ModelOptions:
+	return MODEL_SET.get('open_nsfw')
 
 
 def pre_check() -> bool:
 	download_directory_path = resolve_relative_path('../.assets/models')
-	model_url = MODELS.get('open_nsfw').get('url')
-	model_path = MODELS.get('open_nsfw').get('path')
+	model_hashes = get_model_options().get('hashes')
+	model_sources = get_model_options().get('sources')
 
-	if not faceweave.globals.skip_download:
-		process_manager.check()
-		conditional_download(download_directory_path, [ model_url ])
-		process_manager.end()
-	return is_file(model_path)
+	return conditional_download_hashes(download_directory_path, model_hashes) and conditional_download_sources(download_directory_path, model_sources)
 
 
 def analyse_stream(vision_frame : VisionFrame, video_fps : Fps) -> bool:
@@ -68,19 +70,22 @@ def analyse_stream(vision_frame : VisionFrame, video_fps : Fps) -> bool:
 	return False
 
 
-def analyse_frame(frame : VisionFrame) -> bool:
+def analyse_frame(vision_frame : VisionFrame) -> bool:
 	return False
 
 
 def prepare_frame(vision_frame : VisionFrame) -> VisionFrame:
-	vision_frame = cv2.resize(vision_frame, (224, 224)).astype(numpy.float32)
-	vision_frame -= numpy.array([ 104, 117, 123 ]).astype(numpy.float32)
+	model_size = get_model_options().get('size')
+	model_mean = get_model_options().get('mean')
+	vision_frame = cv2.resize(vision_frame, model_size).astype(numpy.float32)
+	vision_frame -= numpy.array(model_mean).astype(numpy.float32)
 	vision_frame = numpy.expand_dims(vision_frame, axis = 0)
 	return vision_frame
 
 
 @lru_cache(maxsize = None)
 def analyse_image(image_path : str) -> bool:
+	frame = read_image(image_path)
 	return False
 
 

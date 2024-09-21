@@ -1,9 +1,10 @@
 from typing import Optional
+
 import gradio
 
-from faceweave import wording
-from faceweave.uis import choices as uis_choices
-from faceweave.uis.core import register_ui_component
+from facewaeve import wording
+from facewaeve.uis import choices as uis_choices
+from facewaeve.uis.core import register_ui_component
 
 WEBCAM_MODE_RADIO : Optional[gradio.Radio] = None
 WEBCAM_RESOLUTION_DROPDOWN : Optional[gradio.Dropdown] = None
