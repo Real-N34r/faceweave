@@ -7,12 +7,12 @@ from typing import Any, Dict, Generator, List, Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.core import conditional_process
-from facewaeve.filesystem import is_video
-from facewaeve.memory import limit_system_memory
-from facewaeve.uis.core import get_ui_component
-from facewaeve.vision import count_video_frame_total, detect_video_fps, detect_video_resolution, pack_resolution
+from faceweave import state_manager, wording
+from faceweave.core import conditional_process
+from faceweave.filesystem import is_video
+from faceweave.memory import limit_system_memory
+from faceweave.uis.core import get_ui_component
+from faceweave.vision import count_video_frame_total, detect_video_fps, detect_video_resolution, pack_resolution
 
 BENCHMARK_BENCHMARKS_DATAFRAME : Optional[gradio.Dataframe] = None
 BENCHMARK_START_BUTTON : Optional[gradio.Button] = None

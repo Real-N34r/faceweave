@@ -3,7 +3,7 @@ from typing import Optional
 
 import gradio
 
-from facewaeve import metadata, wording
+from faceweave import metadata, wording
 
 METADATA_BUTTON : Optional[gradio.Button] = None
 ACTION_BUTTON : Optional[gradio.Button] = None
@@ -17,15 +17,15 @@ def render() -> None:
 	[
 		{
 			'wording': wording.get('about.become_a_member'),
-			'url': 'https://subscribe.facewaeve.io'
+			'url': 'https://subscribe.faceweave.io'
 		},
 		{
 			'wording': wording.get('about.join_our_community'),
-			'url': 'https://join.facewaeve.io'
+			'url': 'https://join.faceweave.io'
 		},
 		{
 			'wording': wording.get('about.read_the_documentation'),
-			'url': 'https://docs.facewaeve.io'
+			'url': 'https://docs.faceweave.io'
 		}
 	])
 

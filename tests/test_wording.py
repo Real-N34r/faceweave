@@ -1,4 +1,4 @@
-from facewaeve import wording
+from faceweave import wording
 
 
 def test_get() -> None:

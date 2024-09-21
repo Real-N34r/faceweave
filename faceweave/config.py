@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 from typing import Any, List, Optional
 
-from facewaeve import state_manager
+from faceweave import state_manager
 
 CONFIG = None
 

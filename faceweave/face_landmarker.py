@@ -3,12 +3,12 @@ from typing import Tuple
 import cv2
 import numpy
 
-from facewaeve import inference_manager, state_manager
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.face_helper import create_rotated_matrix_and_size, estimate_matrix_by_face_landmark_5, transform_points, warp_face_by_translation
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import conditional_thread_semaphore
-from facewaeve.typing import Angle, BoundingBox, DownloadSet, FaceLandmark5, FaceLandmark68, InferencePool, ModelSet, Prediction, Score, VisionFrame
+from faceweave import inference_manager, state_manager
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.face_helper import create_rotated_matrix_and_size, estimate_matrix_by_face_landmark_5, transform_points, warp_face_by_translation
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import conditional_thread_semaphore
+from faceweave.typing import Angle, BoundingBox, DownloadSet, FaceLandmark5, FaceLandmark68, InferencePool, ModelSet, Prediction, Score, VisionFrame
 
 MODEL_SET : ModelSet =\
 {

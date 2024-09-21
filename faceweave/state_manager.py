@@ -1,8 +1,8 @@
 from typing import Any, Union
 
-from facewaeve.app_context import detect_app_context
-from facewaeve.processors.typing import ProcessorState, ProcessorStateKey
-from facewaeve.typing import State, StateKey, StateSet
+from faceweave.app_context import detect_app_context
+from faceweave.processors.typing import ProcessorState, ProcessorStateKey
+from faceweave.typing import State, StateKey, StateSet
 
 STATES : Union[StateSet, ProcessorState] =\
 {

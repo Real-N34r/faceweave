@@ -2,16 +2,16 @@ from typing import List, Optional, Tuple
 
 import gradio
 
-from facewaeve import logger, state_manager, wording
-from facewaeve.args import collect_step_args
-from facewaeve.common_helper import get_first, get_last
-from facewaeve.filesystem import is_directory
-from facewaeve.jobs import job_manager
-from facewaeve.typing import UiWorkflow
-from facewaeve.uis import choices as uis_choices
-from facewaeve.uis.core import get_ui_component
-from facewaeve.uis.typing import JobManagerAction
-from facewaeve.uis.ui_helper import convert_int_none, convert_str_none, suggest_output_path
+from faceweave import logger, state_manager, wording
+from faceweave.args import collect_step_args
+from faceweave.common_helper import get_first, get_last
+from faceweave.filesystem import is_directory
+from faceweave.jobs import job_manager
+from faceweave.typing import UiWorkflow
+from faceweave.uis import choices as uis_choices
+from faceweave.uis.core import get_ui_component
+from faceweave.uis.typing import JobManagerAction
+from faceweave.uis.ui_helper import convert_int_none, convert_str_none, suggest_output_path
 
 JOB_MANAGER_WRAPPER : Optional[gradio.Column] = None
 JOB_MANAGER_JOB_ACTION_DROPDOWN : Optional[gradio.Dropdown] = None

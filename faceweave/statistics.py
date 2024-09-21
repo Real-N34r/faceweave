@@ -2,9 +2,9 @@ from typing import Any, Dict
 
 import numpy
 
-from facewaeve import logger, state_manager
-from facewaeve.face_store import get_face_store
-from facewaeve.typing import FaceSet
+from faceweave import logger, state_manager
+from faceweave.face_store import get_face_store
+from faceweave.typing import FaceSet
 
 
 def create_statistics(static_faces : FaceSet) -> Dict[str, Any]:

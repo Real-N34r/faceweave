@@ -1,6 +1,6 @@
 from typing import List
 
-from facewaeve.uis.typing import JobManagerAction, JobRunnerAction, WebcamMode
+from faceweave.uis.typing import JobManagerAction, JobRunnerAction, WebcamMode
 
 job_manager_actions : List[JobManagerAction] = [ 'job-create', 'job-submit', 'job-delete', 'job-add-step', 'job-remix-step', 'job-insert-step', 'job-remove-step' ]
 job_runner_actions : List[JobRunnerAction] = [ 'job-run', 'job-run-all', 'job-retry', 'job-retry-all' ]

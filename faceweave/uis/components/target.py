@@ -2,12 +2,12 @@ from typing import Optional, Tuple
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.face_store import clear_reference_faces, clear_static_faces
-from facewaeve.filesystem import get_file_size, is_image, is_video
-from facewaeve.uis.core import register_ui_component
-from facewaeve.uis.typing import ComponentOptions, File
-from facewaeve.vision import get_video_frame, normalize_frame_color
+from faceweave import state_manager, wording
+from faceweave.face_store import clear_reference_faces, clear_static_faces
+from faceweave.filesystem import get_file_size, is_image, is_video
+from faceweave.uis.core import register_ui_component
+from faceweave.uis.typing import ComponentOptions, File
+from faceweave.vision import get_video_frame, normalize_frame_color
 
 FILE_SIZE_LIMIT = 512 * 1024 * 1024
 

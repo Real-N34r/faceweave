@@ -2,11 +2,11 @@ import subprocess
 
 import pytest
 
-from facewaeve import face_classifier, face_detector, face_landmarker, face_recognizer, state_manager
-from facewaeve.download import conditional_download
-from facewaeve.face_analyser import get_many_faces, get_one_face
-from facewaeve.typing import Face
-from facewaeve.vision import read_static_image
+from faceweave import face_classifier, face_detector, face_landmarker, face_recognizer, state_manager
+from faceweave.download import conditional_download
+from faceweave.face_analyser import get_many_faces, get_one_face
+from faceweave.typing import Face
+from faceweave.vision import read_static_image
 from .helper import get_test_example_file, get_test_examples_directory
 
 

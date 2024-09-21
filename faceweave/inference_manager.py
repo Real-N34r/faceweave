@@ -5,11 +5,11 @@ from typing import List
 import onnx
 from onnxruntime import InferenceSession
 
-from facewaeve import process_manager, state_manager
-from facewaeve.app_context import detect_app_context
-from facewaeve.execution import create_execution_providers, has_execution_provider
-from facewaeve.thread_helper import thread_lock
-from facewaeve.typing import DownloadSet, ExecutionProviderKey, InferencePool, InferencePoolSet, ModelInitializer
+from faceweave import process_manager, state_manager
+from faceweave.app_context import detect_app_context
+from faceweave.execution import create_execution_providers, has_execution_provider
+from faceweave.thread_helper import thread_lock
+from faceweave.typing import DownloadSet, ExecutionProviderKey, InferencePool, InferencePoolSet, ModelInitializer
 
 INFERENCE_POOLS : InferencePoolSet =\
 {
@@ -64,7 +64,7 @@ def get_static_model_initializer(model_path : str) -> ModelInitializer:
 
 
 def resolve_execution_provider_keys(model_context : str) -> List[ExecutionProviderKey]:
-	if has_execution_provider('coreml') and (model_context.startswith('facewaeve.processors.modules.age_modifier') or model_context.startswith('facewaeve.processors.modules.frame_colorizer')):
+	if has_execution_provider('coreml') and (model_context.startswith('faceweave.processors.modules.age_modifier') or model_context.startswith('faceweave.processors.modules.frame_colorizer')):
 		return [ 'cpu' ]
 	return state_manager.get_item('execution_providers')
 

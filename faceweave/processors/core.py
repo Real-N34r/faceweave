@@ -7,9 +7,9 @@ from typing import Any, List
 
 from tqdm import tqdm
 
-from facewaeve import logger, state_manager, wording
-from facewaeve.exit_helper import hard_exit
-from facewaeve.typing import ProcessFrames, QueuePayload
+from faceweave import logger, state_manager, wording
+from faceweave.exit_helper import hard_exit
+from faceweave.typing import ProcessFrames, QueuePayload
 
 PROCESSORS_METHODS =\
 [
@@ -30,7 +30,7 @@ PROCESSORS_METHODS =\
 
 def load_processor_module(processor : str) -> Any:
 	try:
-		processor_module = importlib.import_module('facewaeve.processors.modules.' + processor)
+		processor_module = importlib.import_module('faceweave.processors.modules.' + processor)
 		for method_name in PROCESSORS_METHODS:
 			if not hasattr(processor_module, method_name):
 				raise NotImplementedError

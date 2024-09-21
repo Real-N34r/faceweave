@@ -4,7 +4,7 @@ import os
 
 os.environ['SYSTEM_VERSION_COMPAT'] = '0'
 
-from facewaeve import installer
+from faceweave import installer
 
 if __name__ == '__main__':
 	installer.cli()

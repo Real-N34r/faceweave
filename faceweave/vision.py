@@ -5,10 +5,10 @@ import cv2
 import numpy
 from cv2.typing import Size
 
-from facewaeve.choices import image_template_sizes, video_template_sizes
-from facewaeve.common_helper import is_windows
-from facewaeve.filesystem import is_image, is_video, sanitize_path_for_windows
-from facewaeve.typing import Fps, Orientation, Resolution, VisionFrame
+from faceweave.choices import image_template_sizes, video_template_sizes
+from faceweave.common_helper import is_windows
+from faceweave.filesystem import is_image, is_video, sanitize_path_for_windows
+from faceweave.typing import Fps, Orientation, Resolution, VisionFrame
 
 
 @lru_cache(maxsize = 128)

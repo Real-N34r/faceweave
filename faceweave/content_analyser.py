@@ -4,12 +4,12 @@ import cv2
 import numpy
 from tqdm import tqdm
 
-from facewaeve import inference_manager, state_manager, wording
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import conditional_thread_semaphore
-from facewaeve.typing import Fps, InferencePool, ModelOptions, ModelSet, VisionFrame
-from facewaeve.vision import count_video_frame_total, detect_video_fps, get_video_frame, read_image
+from faceweave import inference_manager, state_manager, wording
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import conditional_thread_semaphore
+from faceweave.typing import Fps, InferencePool, ModelOptions, ModelSet, VisionFrame
+from faceweave.vision import count_video_frame_total, detect_video_fps, get_video_frame, read_image
 
 MODEL_SET : ModelSet =\
 {

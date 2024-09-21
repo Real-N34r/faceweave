@@ -1,6 +1,6 @@
 import tempfile
 
-from facewaeve.json import read_json, write_json
+from faceweave.json import read_json, write_json
 
 
 def test_read_json() -> None:

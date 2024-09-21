@@ -2,11 +2,11 @@ from typing import Optional
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import face_landmarker, state_manager, wording
-from facewaeve.common_helper import calc_float_step
-from facewaeve.typing import FaceLandmarkerModel, Score
-from facewaeve.uis.core import register_ui_component
+import faceweave.choices
+from faceweave import face_landmarker, state_manager, wording
+from faceweave.common_helper import calc_float_step
+from faceweave.typing import FaceLandmarkerModel, Score
+from faceweave.uis.core import register_ui_component
 
 FACE_LANDMARKER_MODEL_DROPDOWN : Optional[gradio.Dropdown] = None
 FACE_LANDMARKER_SCORE_SLIDER : Optional[gradio.Slider] = None
@@ -18,15 +18,15 @@ def render() -> None:
 
 	FACE_LANDMARKER_MODEL_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.face_landmarker_model_dropdown'),
-		choices = facewaeve.choices.face_landmarker_models,
+		choices = faceweave.choices.face_landmarker_models,
 		value = state_manager.get_item('face_landmarker_model')
 	)
 	FACE_LANDMARKER_SCORE_SLIDER = gradio.Slider(
 		label = wording.get('uis.face_landmarker_score_slider'),
 		value = state_manager.get_item('face_landmarker_score'),
-		step = calc_float_step(facewaeve.choices.face_landmarker_score_range),
-		minimum = facewaeve.choices.face_landmarker_score_range[0],
-		maximum = facewaeve.choices.face_landmarker_score_range[-1]
+		step = calc_float_step(faceweave.choices.face_landmarker_score_range),
+		minimum = faceweave.choices.face_landmarker_score_range[0],
+		maximum = faceweave.choices.face_landmarker_score_range[-1]
 	)
 	register_ui_component('face_landmarker_model_dropdown', FACE_LANDMARKER_MODEL_DROPDOWN)
 	register_ui_component('face_landmarker_score_slider', FACE_LANDMARKER_SCORE_SLIDER)

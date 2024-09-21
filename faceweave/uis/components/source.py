@@ -2,11 +2,11 @@ from typing import List, Optional, Tuple
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import get_first
-from facewaeve.filesystem import filter_audio_paths, filter_image_paths, has_audio, has_image
-from facewaeve.uis.core import register_ui_component
-from facewaeve.uis.typing import File
+from faceweave import state_manager, wording
+from faceweave.common_helper import get_first
+from faceweave.filesystem import filter_audio_paths, filter_image_paths, has_audio, has_image
+from faceweave.uis.core import register_ui_component
+from faceweave.uis.typing import File
 
 SOURCE_FILE : Optional[gradio.File] = None
 SOURCE_AUDIO : Optional[gradio.Audio] = None

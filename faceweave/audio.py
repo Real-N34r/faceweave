@@ -5,10 +5,10 @@ import numpy
 import scipy
 from numpy._typing import NDArray
 
-from facewaeve.ffmpeg import read_audio_buffer
-from facewaeve.filesystem import is_audio
-from facewaeve.typing import Audio, AudioFrame, Fps, Mel, MelFilterBank, Spectrogram
-from facewaeve.voice_extractor import batch_extract_voice
+from faceweave.ffmpeg import read_audio_buffer
+from faceweave.filesystem import is_audio
+from faceweave.typing import Audio, AudioFrame, Fps, Mel, MelFilterBank, Spectrogram
+from faceweave.voice_extractor import batch_extract_voice
 
 
 @lru_cache(maxsize = 128)

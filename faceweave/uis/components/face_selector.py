@@ -3,18 +3,18 @@ from typing import List, Optional, Tuple
 import gradio
 from gradio_rangeslider import RangeSlider
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_float_step, calc_int_step
-from facewaeve.face_analyser import get_many_faces
-from facewaeve.face_selector import sort_and_filter_faces
-from facewaeve.face_store import clear_reference_faces, clear_static_faces
-from facewaeve.filesystem import is_image, is_video
-from facewaeve.typing import FaceSelectorMode, FaceSelectorOrder, Gender, Race, VisionFrame
-from facewaeve.uis.core import get_ui_component, get_ui_components, register_ui_component
-from facewaeve.uis.typing import ComponentOptions
-from facewaeve.uis.ui_helper import convert_str_none
-from facewaeve.vision import get_video_frame, normalize_frame_color, read_static_image
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_float_step, calc_int_step
+from faceweave.face_analyser import get_many_faces
+from faceweave.face_selector import sort_and_filter_faces
+from faceweave.face_store import clear_reference_faces, clear_static_faces
+from faceweave.filesystem import is_image, is_video
+from faceweave.typing import FaceSelectorMode, FaceSelectorOrder, Gender, Race, VisionFrame
+from faceweave.uis.core import get_ui_component, get_ui_components, register_ui_component
+from faceweave.uis.typing import ComponentOptions
+from faceweave.uis.ui_helper import convert_str_none
+from faceweave.vision import get_video_frame, normalize_frame_color, read_static_image
 
 FACE_SELECTOR_MODE_DROPDOWN : Optional[gradio.Dropdown] = None
 FACE_SELECTOR_ORDER_DROPDOWN : Optional[gradio.Dropdown] = None
@@ -50,7 +50,7 @@ def render() -> None:
 		reference_face_gallery_options['value'] = extract_gallery_frames(reference_frame)
 	FACE_SELECTOR_MODE_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.face_selector_mode_dropdown'),
-		choices = facewaeve.choices.face_selector_modes,
+		choices = faceweave.choices.face_selector_modes,
 		value = state_manager.get_item('face_selector_mode')
 	)
 	REFERENCE_FACE_POSITION_GALLERY = gradio.Gallery(**reference_face_gallery_options)
@@ -58,35 +58,35 @@ def render() -> None:
 		with gradio.Row():
 			FACE_SELECTOR_ORDER_DROPDOWN = gradio.Dropdown(
 				label = wording.get('uis.face_selector_order_dropdown'),
-				choices = facewaeve.choices.face_selector_orders,
+				choices = faceweave.choices.face_selector_orders,
 				value = state_manager.get_item('face_selector_order')
 			)
 			FACE_SELECTOR_GENDER_DROPDOWN = gradio.Dropdown(
 				label = wording.get('uis.face_selector_gender_dropdown'),
-				choices = [ 'none' ] + facewaeve.choices.face_selector_genders,
+				choices = [ 'none' ] + faceweave.choices.face_selector_genders,
 				value = state_manager.get_item('face_selector_gender') or 'none'
 			)
 			FACE_SELECTOR_RACE_DROPDOWN = gradio.Dropdown(
 				label = wording.get('uis.face_selector_race_dropdown'),
-				choices = ['none'] + facewaeve.choices.face_selector_races,
+				choices = ['none'] + faceweave.choices.face_selector_races,
 				value = state_manager.get_item('face_selector_race') or 'none'
 			)
 		with gradio.Row():
-			face_selector_age_start = state_manager.get_item('face_selector_age_start') or facewaeve.choices.face_selector_age_range[0]
-			face_selector_age_end = state_manager.get_item('face_selector_age_end') or facewaeve.choices.face_selector_age_range[-1]
+			face_selector_age_start = state_manager.get_item('face_selector_age_start') or faceweave.choices.face_selector_age_range[0]
+			face_selector_age_end = state_manager.get_item('face_selector_age_end') or faceweave.choices.face_selector_age_range[-1]
 			FACE_SELECTOR_AGE_RANGE_SLIDER = RangeSlider(
 				label = wording.get('uis.face_selector_age_range_slider'),
-				minimum = facewaeve.choices.face_selector_age_range[0],
-				maximum = facewaeve.choices.face_selector_age_range[-1],
+				minimum = faceweave.choices.face_selector_age_range[0],
+				maximum = faceweave.choices.face_selector_age_range[-1],
 				value = (face_selector_age_start, face_selector_age_end),
-				step = calc_int_step(facewaeve.choices.face_selector_age_range)
+				step = calc_int_step(faceweave.choices.face_selector_age_range)
 			)
 	REFERENCE_FACE_DISTANCE_SLIDER = gradio.Slider(
 		label = wording.get('uis.reference_face_distance_slider'),
 		value = state_manager.get_item('reference_face_distance'),
-		step = calc_float_step(facewaeve.choices.reference_face_distance_range),
-		minimum = facewaeve.choices.reference_face_distance_range[0],
-		maximum = facewaeve.choices.reference_face_distance_range[-1],
+		step = calc_float_step(faceweave.choices.reference_face_distance_range),
+		minimum = faceweave.choices.reference_face_distance_range[0],
+		maximum = faceweave.choices.reference_face_distance_range[-1],
 		visible = 'reference' in state_manager.get_item('face_selector_mode')
 	)
 	register_ui_component('face_selector_mode_dropdown', FACE_SELECTOR_MODE_DROPDOWN)

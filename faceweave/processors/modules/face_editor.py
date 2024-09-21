@@ -4,25 +4,25 @@ from typing import List, Tuple
 import cv2
 import numpy
 
-import facewaeve.jobs.job_manager
-import facewaeve.jobs.job_store
-import facewaeve.processors.core as processors
-from facewaeve import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
-from facewaeve.common_helper import create_float_metavar
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.face_analyser import get_many_faces, get_one_face
-from facewaeve.face_helper import paste_back, scale_face_landmark_5, warp_face_by_face_landmark_5
-from facewaeve.face_masker import create_static_box_mask
-from facewaeve.face_selector import find_similar_faces, sort_and_filter_faces
-from facewaeve.face_store import get_reference_faces
-from facewaeve.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.live_portrait import create_rotation, limit_euler_angles, limit_expression
-from facewaeve.processors.typing import FaceEditorInputs, LivePortraitExpression, LivePortraitFeatureVolume, LivePortraitMotionPoints, LivePortraitPitch, LivePortraitRoll, LivePortraitRotation, LivePortraitScale, LivePortraitTranslation, LivePortraitYaw
-from facewaeve.program_helper import find_argument_group
-from facewaeve.thread_helper import conditional_thread_semaphore, thread_semaphore
-from facewaeve.typing import ApplyStateItem, Args, Face, FaceLandmark68, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
-from facewaeve.vision import read_image, read_static_image, write_image
+import faceweave.jobs.job_manager
+import faceweave.jobs.job_store
+import faceweave.processors.core as processors
+from faceweave import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
+from faceweave.common_helper import create_float_metavar
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.face_analyser import get_many_faces, get_one_face
+from faceweave.face_helper import paste_back, scale_face_landmark_5, warp_face_by_face_landmark_5
+from faceweave.face_masker import create_static_box_mask
+from faceweave.face_selector import find_similar_faces, sort_and_filter_faces
+from faceweave.face_store import get_reference_faces
+from faceweave.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.live_portrait import create_rotation, limit_euler_angles, limit_expression
+from faceweave.processors.typing import FaceEditorInputs, LivePortraitExpression, LivePortraitFeatureVolume, LivePortraitMotionPoints, LivePortraitPitch, LivePortraitRoll, LivePortraitRotation, LivePortraitScale, LivePortraitTranslation, LivePortraitYaw
+from faceweave.program_helper import find_argument_group
+from faceweave.thread_helper import conditional_thread_semaphore, thread_semaphore
+from faceweave.typing import ApplyStateItem, Args, Face, FaceLandmark68, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
+from faceweave.vision import read_image, read_static_image, write_image
 
 MODEL_SET : ModelSet =\
 {
@@ -134,7 +134,7 @@ def register_args(program : ArgumentParser) -> None:
 		group_processors.add_argument('--face-editor-head-pitch', help = wording.get('help.face_editor_head_pitch'), type = float, default = config.get_float_value('processors.face_editor_head_pitch', '0'), choices = processors_choices.face_editor_head_pitch_range, metavar = create_float_metavar(processors_choices.face_editor_head_pitch_range))
 		group_processors.add_argument('--face-editor-head-yaw', help=wording.get('help.face_editor_head_yaw'), type = float, default = config.get_float_value('processors.face_editor_head_yaw', '0'), choices = processors_choices.face_editor_head_yaw_range, metavar = create_float_metavar(processors_choices.face_editor_head_yaw_range))
 		group_processors.add_argument('--face-editor-head-roll', help=wording.get('help.face_editor_head_roll'), type = float, default = config.get_float_value('processors.face_editor_head_roll', '0'), choices = processors_choices.face_editor_head_roll_range, metavar = create_float_metavar(processors_choices.face_editor_head_roll_range))
-		facewaeve.jobs.job_store.register_step_keys([ 'face_editor_model', 'face_editor_eyebrow_direction', 'face_editor_eye_gaze_horizontal', 'face_editor_eye_gaze_vertical', 'face_editor_eye_open_ratio', 'face_editor_lip_open_ratio', 'face_editor_mouth_grim', 'face_editor_mouth_pout', 'face_editor_mouth_purse', 'face_editor_mouth_smile', 'face_editor_mouth_position_horizontal', 'face_editor_mouth_position_vertical', 'face_editor_head_pitch', 'face_editor_head_yaw', 'face_editor_head_roll' ])
+		faceweave.jobs.job_store.register_step_keys([ 'face_editor_model', 'face_editor_eyebrow_direction', 'face_editor_eye_gaze_horizontal', 'face_editor_eye_gaze_vertical', 'face_editor_eye_open_ratio', 'face_editor_lip_open_ratio', 'face_editor_mouth_grim', 'face_editor_mouth_pout', 'face_editor_mouth_purse', 'face_editor_mouth_smile', 'face_editor_mouth_position_horizontal', 'face_editor_mouth_position_vertical', 'face_editor_head_pitch', 'face_editor_head_yaw', 'face_editor_head_roll' ])
 
 
 def apply_args(args : Args, apply_state_item : ApplyStateItem) -> None:

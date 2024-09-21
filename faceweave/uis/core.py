@@ -7,11 +7,11 @@ from typing import Any, Dict, List, Optional
 import gradio
 from gradio.themes import Size
 
-from facewaeve import logger, metadata, state_manager, wording
-from facewaeve.exit_helper import hard_exit
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.uis import overrides
-from facewaeve.uis.typing import Component, ComponentName
+from faceweave import logger, metadata, state_manager, wording
+from faceweave.exit_helper import hard_exit
+from faceweave.filesystem import resolve_relative_path
+from faceweave.uis import overrides
+from faceweave.uis.typing import Component, ComponentName
 
 os.environ['GRADIO_ANALYTICS_ENABLED'] = '0'
 
@@ -34,7 +34,7 @@ UI_LAYOUT_METHODS =\
 
 def load_ui_layout_module(ui_layout : str) -> Any:
 	try:
-		ui_layout_module = importlib.import_module('facewaeve.uis.layouts.' + ui_layout)
+		ui_layout_module = importlib.import_module('faceweave.uis.layouts.' + ui_layout)
 		for method_name in UI_LAYOUT_METHODS:
 			if not hasattr(ui_layout_module, method_name):
 				raise NotImplementedError

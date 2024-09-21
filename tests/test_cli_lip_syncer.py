@@ -3,8 +3,8 @@ import sys
 
 import pytest
 
-from facewaeve.download import conditional_download
-from facewaeve.jobs.job_manager import clear_jobs, init_jobs
+from faceweave.download import conditional_download
+from faceweave.jobs.job_manager import clear_jobs, init_jobs
 from .helper import get_test_example_file, get_test_examples_directory, get_test_jobs_directory, get_test_output_file, is_test_output_file, prepare_test_output_directory
 
 
@@ -27,14 +27,14 @@ def before_each() -> None:
 
 
 def test_sync_lip_to_image() -> None:
-	commands = [ sys.executable, 'facewaeve.py', 'headless-run', '-j', get_test_jobs_directory(), '--processors', 'lip_syncer', '-s', get_test_example_file('source.mp3'), '-t', get_test_example_file('target-240p.jpg'), '-o', get_test_output_file('test_sync_lip_to_image.jpg') ]
+	commands = [ sys.executable, 'faceweave.py', 'headless-run', '-j', get_test_jobs_directory(), '--processors', 'lip_syncer', '-s', get_test_example_file('source.mp3'), '-t', get_test_example_file('target-240p.jpg'), '-o', get_test_output_file('test_sync_lip_to_image.jpg') ]
 
 	assert subprocess.run(commands).returncode == 0
 	assert is_test_output_file('test_sync_lip_to_image.jpg') is True
 
 
 def test_sync_lip_to_video() -> None:
-	commands = [ sys.executable, 'facewaeve.py', 'headless-run', '-j', get_test_jobs_directory(), '--processors', 'lip_syncer', '-s', get_test_example_file('source.mp3'), '-t', get_test_example_file('target-240p.mp4'), '-o', get_test_output_file('test_sync_lip_to_video.mp4'), '--trim-frame-end', '1' ]
+	commands = [ sys.executable, 'faceweave.py', 'headless-run', '-j', get_test_jobs_directory(), '--processors', 'lip_syncer', '-s', get_test_example_file('source.mp3'), '-t', get_test_example_file('target-240p.mp4'), '-o', get_test_output_file('test_sync_lip_to_video.mp4'), '--trim-frame-end', '1' ]
 
 	assert subprocess.run(commands).returncode == 0
 	assert is_test_output_file('test_sync_lip_to_video.mp4') is True

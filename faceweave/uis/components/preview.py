@@ -5,19 +5,19 @@ import cv2
 import gradio
 import numpy
 
-from facewaeve import logger, process_manager, state_manager, wording
-from facewaeve.audio import create_empty_audio_frame, get_audio_frame
-from facewaeve.common_helper import get_first
-from facewaeve.content_analyser import analyse_frame
-from facewaeve.core import conditional_append_reference_faces
-from facewaeve.face_analyser import get_average_face, get_many_faces
-from facewaeve.face_store import clear_reference_faces, clear_static_faces, get_reference_faces
-from facewaeve.filesystem import filter_audio_paths, is_image, is_video
-from facewaeve.processors.core import get_processors_modules
-from facewaeve.typing import AudioFrame, Face, FaceSet, VisionFrame
-from facewaeve.uis.core import get_ui_component, get_ui_components, register_ui_component
-from facewaeve.uis.typing import ComponentOptions
-from facewaeve.vision import count_video_frame_total, detect_frame_orientation, get_video_frame, normalize_frame_color, read_static_image, read_static_images, resize_frame_resolution
+from faceweave import logger, process_manager, state_manager, wording
+from faceweave.audio import create_empty_audio_frame, get_audio_frame
+from faceweave.common_helper import get_first
+from faceweave.content_analyser import analyse_frame
+from faceweave.core import conditional_append_reference_faces
+from faceweave.face_analyser import get_average_face, get_many_faces
+from faceweave.face_store import clear_reference_faces, clear_static_faces, get_reference_faces
+from faceweave.filesystem import filter_audio_paths, is_image, is_video
+from faceweave.processors.core import get_processors_modules
+from faceweave.typing import AudioFrame, Face, FaceSet, VisionFrame
+from faceweave.uis.core import get_ui_component, get_ui_components, register_ui_component
+from faceweave.uis.typing import ComponentOptions
+from faceweave.vision import count_video_frame_total, detect_frame_orientation, get_video_frame, normalize_frame_color, read_static_image, read_static_images, resize_frame_resolution
 
 PREVIEW_IMAGE : Optional[gradio.Image] = None
 PREVIEW_FRAME_SLIDER : Optional[gradio.Slider] = None

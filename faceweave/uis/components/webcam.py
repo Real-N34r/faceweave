@@ -8,18 +8,18 @@ import cv2
 import gradio
 from tqdm import tqdm
 
-from facewaeve import logger, state_manager, wording
-from facewaeve.audio import create_empty_audio_frame
-from facewaeve.common_helper import is_windows
-from facewaeve.content_analyser import analyse_stream
-from facewaeve.face_analyser import get_average_face, get_many_faces
-from facewaeve.ffmpeg import open_ffmpeg
-from facewaeve.filesystem import filter_image_paths
-from facewaeve.processors.core import get_processors_modules
-from facewaeve.typing import Face, Fps, VisionFrame
-from facewaeve.uis.core import get_ui_component
-from facewaeve.uis.typing import StreamMode, WebcamMode
-from facewaeve.vision import normalize_frame_color, read_static_images, unpack_resolution
+from faceweave import logger, state_manager, wording
+from faceweave.audio import create_empty_audio_frame
+from faceweave.common_helper import is_windows
+from faceweave.content_analyser import analyse_stream
+from faceweave.face_analyser import get_average_face, get_many_faces
+from faceweave.ffmpeg import open_ffmpeg
+from faceweave.filesystem import filter_image_paths
+from faceweave.processors.core import get_processors_modules
+from faceweave.typing import Face, Fps, VisionFrame
+from faceweave.uis.core import get_ui_component
+from faceweave.uis.typing import StreamMode, WebcamMode
+from faceweave.vision import normalize_frame_color, read_static_images, unpack_resolution
 
 WEBCAM_CAPTURE : Optional[cv2.VideoCapture] = None
 WEBCAM_IMAGE : Optional[gradio.Image] = None

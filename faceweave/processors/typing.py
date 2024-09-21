@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Literal, TypedDict
 
 from numpy._typing import NDArray
 
-from facewaeve.typing import AppContext, AudioFrame, Face, FaceSet, VisionFrame
+from faceweave.typing import AppContext, AudioFrame, Face, FaceSet, VisionFrame
 
 AgeModifierModel = Literal['styleganex_age']
 ExpressionRestorerModel = Literal['live_portrait']

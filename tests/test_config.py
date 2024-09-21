@@ -2,7 +2,7 @@ from configparser import ConfigParser
 
 import pytest
 
-from facewaeve import config
+from faceweave import config
 
 
 @pytest.fixture(scope = 'module', autouse = True)

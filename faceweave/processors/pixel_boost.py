@@ -3,7 +3,7 @@ from typing import List
 import numpy
 from cv2.typing import Size
 
-from facewaeve.typing import VisionFrame
+from faceweave.typing import VisionFrame
 
 
 def implode_pixel_boost(crop_vision_frame : VisionFrame, pixel_boost_total : int, model_size : Size) -> VisionFrame:

@@ -3,15 +3,15 @@ from typing import Optional, Tuple
 
 import gradio
 
-from facewaeve import process_manager, state_manager, wording
-from facewaeve.args import collect_step_args
-from facewaeve.core import process_step
-from facewaeve.filesystem import is_directory, is_image, is_video
-from facewaeve.jobs import job_helper, job_manager, job_runner, job_store
-from facewaeve.temp_helper import clear_temp_directory
-from facewaeve.typing import Args, UiWorkflow
-from facewaeve.uis.core import get_ui_component
-from facewaeve.uis.ui_helper import suggest_output_path
+from faceweave import process_manager, state_manager, wording
+from faceweave.args import collect_step_args
+from faceweave.core import process_step
+from faceweave.filesystem import is_directory, is_image, is_video
+from faceweave.jobs import job_helper, job_manager, job_runner, job_store
+from faceweave.temp_helper import clear_temp_directory
+from faceweave.typing import Args, UiWorkflow
+from faceweave.uis.core import get_ui_component
+from faceweave.uis.ui_helper import suggest_output_path
 
 INSTANT_RUNNER_WRAPPER : Optional[gradio.Row] = None
 INSTANT_RUNNER_START_BUTTON : Optional[gradio.Button] = None

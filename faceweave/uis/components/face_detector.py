@@ -2,12 +2,12 @@ from typing import Optional, Sequence, Tuple
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import choices, face_detector, state_manager, wording
-from facewaeve.common_helper import calc_float_step, get_last
-from facewaeve.typing import Angle, FaceDetectorModel, Score
-from facewaeve.uis.core import register_ui_component
-from facewaeve.uis.typing import ComponentOptions
+import faceweave.choices
+from faceweave import choices, face_detector, state_manager, wording
+from faceweave.common_helper import calc_float_step, get_last
+from faceweave.typing import Angle, FaceDetectorModel, Score
+from faceweave.uis.core import register_ui_component
+from faceweave.uis.typing import ComponentOptions
 
 FACE_DETECTOR_MODEL_DROPDOWN : Optional[gradio.Dropdown] = None
 FACE_DETECTOR_SIZE_DROPDOWN : Optional[gradio.Dropdown] = None
@@ -26,26 +26,26 @@ def render() -> None:
 		'label': wording.get('uis.face_detector_size_dropdown'),
 		'value': state_manager.get_item('face_detector_size')
 	}
-	if state_manager.get_item('face_detector_size') in facewaeve.choices.face_detector_set[state_manager.get_item('face_detector_model')]:
-		face_detector_size_dropdown_options['choices'] = facewaeve.choices.face_detector_set[state_manager.get_item('face_detector_model')]
+	if state_manager.get_item('face_detector_size') in faceweave.choices.face_detector_set[state_manager.get_item('face_detector_model')]:
+		face_detector_size_dropdown_options['choices'] = faceweave.choices.face_detector_set[state_manager.get_item('face_detector_model')]
 	with gradio.Row():
 		FACE_DETECTOR_MODEL_DROPDOWN = gradio.Dropdown(
 			label = wording.get('uis.face_detector_model_dropdown'),
-			choices = facewaeve.choices.face_detector_set.keys(),
+			choices = faceweave.choices.face_detector_set.keys(),
 			value = state_manager.get_item('face_detector_model')
 		)
 		FACE_DETECTOR_SIZE_DROPDOWN = gradio.Dropdown(**face_detector_size_dropdown_options)
 	FACE_DETECTOR_ANGLES_CHECKBOX_GROUP = gradio.CheckboxGroup(
 		label = wording.get('uis.face_detector_angles_checkbox_group'),
-		choices = facewaeve.choices.face_detector_angles,
+		choices = faceweave.choices.face_detector_angles,
 		value = state_manager.get_item('face_detector_angles')
 	)
 	FACE_DETECTOR_SCORE_SLIDER = gradio.Slider(
 		label = wording.get('uis.face_detector_score_slider'),
 		value = state_manager.get_item('face_detector_score'),
-		step = calc_float_step(facewaeve.choices.face_detector_score_range),
-		minimum = facewaeve.choices.face_detector_score_range[0],
-		maximum = facewaeve.choices.face_detector_score_range[-1]
+		step = calc_float_step(faceweave.choices.face_detector_score_range),
+		minimum = faceweave.choices.face_detector_score_range[0],
+		maximum = faceweave.choices.face_detector_score_range[-1]
 	)
 	register_ui_component('face_detector_model_dropdown', FACE_DETECTOR_MODEL_DROPDOWN)
 	register_ui_component('face_detector_size_dropdown', FACE_DETECTOR_SIZE_DROPDOWN)
@@ -76,7 +76,7 @@ def update_face_detector_size(face_detector_size : str) -> None:
 
 
 def update_face_detector_angles(face_detector_angles : Sequence[Angle]) -> gradio.CheckboxGroup:
-	face_detector_angles = face_detector_angles or facewaeve.choices.face_detector_angles
+	face_detector_angles = face_detector_angles or faceweave.choices.face_detector_angles
 	state_manager.set_item('face_detector_angles', face_detector_angles)
 	return gradio.CheckboxGroup(value = state_manager.get_item('face_detector_angles'))
 

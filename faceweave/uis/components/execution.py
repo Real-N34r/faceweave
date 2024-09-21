@@ -2,10 +2,10 @@ from typing import List, Optional
 
 import gradio
 
-from facewaeve import content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, state_manager, voice_extractor, wording
-from facewaeve.execution import get_execution_provider_choices
-from facewaeve.processors.core import clear_processors_modules
-from facewaeve.typing import ExecutionProviderKey
+from faceweave import content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, state_manager, voice_extractor, wording
+from faceweave.execution import get_execution_provider_choices
+from faceweave.processors.core import clear_processors_modules
+from faceweave.typing import ExecutionProviderKey
 
 EXECUTION_PROVIDERS_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
 

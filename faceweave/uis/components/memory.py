@@ -2,10 +2,10 @@ from typing import Optional
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_int_step
-from facewaeve.typing import VideoMemoryStrategy
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_int_step
+from faceweave.typing import VideoMemoryStrategy
 
 VIDEO_MEMORY_STRATEGY_DROPDOWN : Optional[gradio.Dropdown] = None
 SYSTEM_MEMORY_LIMIT_SLIDER : Optional[gradio.Slider] = None
@@ -17,14 +17,14 @@ def render() -> None:
 
 	VIDEO_MEMORY_STRATEGY_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.video_memory_strategy_dropdown'),
-		choices = facewaeve.choices.video_memory_strategies,
+		choices = faceweave.choices.video_memory_strategies,
 		value = state_manager.get_item('video_memory_strategy')
 	)
 	SYSTEM_MEMORY_LIMIT_SLIDER = gradio.Slider(
 		label = wording.get('uis.system_memory_limit_slider'),
-		step = calc_int_step(facewaeve.choices.system_memory_limit_range),
-		minimum = facewaeve.choices.system_memory_limit_range[0],
-		maximum = facewaeve.choices.system_memory_limit_range[-1],
+		step = calc_int_step(faceweave.choices.system_memory_limit_range),
+		minimum = faceweave.choices.system_memory_limit_range[0],
+		maximum = faceweave.choices.system_memory_limit_range[-1],
 		value = state_manager.get_item('system_memory_limit')
 	)
 

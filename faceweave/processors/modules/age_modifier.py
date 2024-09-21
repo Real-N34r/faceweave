@@ -6,24 +6,24 @@ import numpy
 from cv2.typing import Size
 from numpy.typing import NDArray
 
-import facewaeve.jobs.job_manager
-import facewaeve.jobs.job_store
-import facewaeve.processors.core as processors
-from facewaeve import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
-from facewaeve.common_helper import create_int_metavar
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.face_analyser import get_many_faces, get_one_face
-from facewaeve.face_helper import merge_matrix, paste_back, warp_face_by_face_landmark_5
-from facewaeve.face_masker import create_occlusion_mask, create_static_box_mask
-from facewaeve.face_selector import find_similar_faces, sort_and_filter_faces
-from facewaeve.face_store import get_reference_faces
-from facewaeve.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.typing import AgeModifierInputs
-from facewaeve.program_helper import find_argument_group
-from facewaeve.thread_helper import thread_semaphore
-from facewaeve.typing import ApplyStateItem, Args, Face, InferencePool, Mask, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
-from facewaeve.vision import read_image, read_static_image, write_image
+import faceweave.jobs.job_manager
+import faceweave.jobs.job_store
+import faceweave.processors.core as processors
+from faceweave import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
+from faceweave.common_helper import create_int_metavar
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.face_analyser import get_many_faces, get_one_face
+from faceweave.face_helper import merge_matrix, paste_back, warp_face_by_face_landmark_5
+from faceweave.face_masker import create_occlusion_mask, create_static_box_mask
+from faceweave.face_selector import find_similar_faces, sort_and_filter_faces
+from faceweave.face_store import get_reference_faces
+from faceweave.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.typing import AgeModifierInputs
+from faceweave.program_helper import find_argument_group
+from faceweave.thread_helper import thread_semaphore
+from faceweave.typing import ApplyStateItem, Args, Face, InferencePool, Mask, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
+from faceweave.vision import read_image, read_static_image, write_image
 
 MODEL_SET : ModelSet =\
 {
@@ -72,7 +72,7 @@ def register_args(program : ArgumentParser) -> None:
 	if group_processors:
 		group_processors.add_argument('--age-modifier-model', help = wording.get('help.age_modifier_model'), default = config.get_str_value('processors.age_modifier_model', 'styleganex_age'), choices = processors_choices.age_modifier_models)
 		group_processors.add_argument('--age-modifier-direction', help = wording.get('help.age_modifier_direction'), type = int, default = config.get_int_value('processors.age_modifier_direction', '0'), choices = processors_choices.age_modifier_direction_range, metavar = create_int_metavar(processors_choices.age_modifier_direction_range))
-		facewaeve.jobs.job_store.register_step_keys([ 'age_modifier_model', 'age_modifier_direction' ])
+		faceweave.jobs.job_store.register_step_keys([ 'age_modifier_model', 'age_modifier_direction' ])
 
 
 def apply_args(args : Args, apply_state_item : ApplyStateItem) -> None:

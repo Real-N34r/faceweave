@@ -1,7 +1,7 @@
-from facewaeve.ffmpeg import concat_video
-from facewaeve.filesystem import is_image, is_video, move_file, remove_file
-from facewaeve.jobs import job_helper, job_manager
-from facewaeve.typing import JobOutputSet, JobStep, ProcessStep
+from faceweave.ffmpeg import concat_video
+from faceweave.filesystem import is_image, is_video, move_file, remove_file
+from faceweave.jobs import job_helper, job_manager
+from faceweave.typing import JobOutputSet, JobStep, ProcessStep
 
 
 def run_job(job_id : str, process_step : ProcessStep) -> bool:

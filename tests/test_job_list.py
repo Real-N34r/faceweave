@@ -2,8 +2,8 @@ from time import sleep
 
 import pytest
 
-from facewaeve.jobs.job_list import compose_job_list
-from facewaeve.jobs.job_manager import clear_jobs, create_job, init_jobs
+from faceweave.jobs.job_list import compose_job_list
+from faceweave.jobs.job_manager import clear_jobs, create_job, init_jobs
 from .helper import get_test_jobs_directory
 
 

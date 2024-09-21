@@ -1,10 +1,10 @@
-from facewaeve import state_manager
-from facewaeve.filesystem import is_image, is_video, list_directory
-from facewaeve.jobs import job_store
-from facewaeve.normalizer import normalize_fps, normalize_padding
-from facewaeve.processors.core import get_processors_modules
-from facewaeve.typing import ApplyStateItem, Args
-from facewaeve.vision import create_image_resolutions, create_video_resolutions, detect_image_resolution, detect_video_fps, detect_video_resolution, pack_resolution
+from faceweave import state_manager
+from faceweave.filesystem import is_image, is_video, list_directory
+from faceweave.jobs import job_store
+from faceweave.normalizer import normalize_fps, normalize_padding
+from faceweave.processors.core import get_processors_modules
+from faceweave.typing import ApplyStateItem, Args
+from faceweave.vision import create_image_resolutions, create_video_resolutions, detect_image_resolution, detect_video_fps, detect_video_resolution, pack_resolution
 
 
 def reduce_step_args(args : Args) -> Args:
@@ -92,7 +92,7 @@ def apply_args(args : Args, apply_state_item : ApplyStateItem) -> None:
 		apply_state_item('output_video_fps', output_video_fps)
 	apply_state_item('skip_audio', args.get('skip_audio'))
 	# processors
-	available_processors = list_directory('facewaeve/processors/modules')
+	available_processors = list_directory('faceweave/processors/modules')
 	apply_state_item('processors', args.get('processors'))
 	for processor_module in get_processors_modules(available_processors):
 		processor_module.apply_args(args, apply_state_item)

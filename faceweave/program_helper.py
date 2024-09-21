@@ -1,8 +1,8 @@
 from argparse import ArgumentParser, _ArgumentGroup, _SubParsersAction
 from typing import List, Optional
 
-import facewaeve.choices
-from facewaeve.processors import choices as processors_choices
+import faceweave.choices
+from faceweave.processors import choices as processors_choices
 
 
 def find_argument_group(program : ArgumentParser, group_name : str) -> Optional[_ArgumentGroup]:
@@ -37,7 +37,7 @@ def validate_actions(program : ArgumentParser) -> bool:
 
 def suggest_face_detector_choices(program : ArgumentParser) -> List[str]:
 	known_args, _ = program.parse_known_args()
-	return facewaeve.choices.face_detector_set.get(known_args.face_detector_model) #type:ignore[call-overload]
+	return faceweave.choices.face_detector_set.get(known_args.face_detector_model) #type:ignore[call-overload]
 
 
 def suggest_face_swapper_pixel_boost_choices(program : ArgumentParser) -> List[str]:

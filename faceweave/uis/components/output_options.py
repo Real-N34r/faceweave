@@ -2,13 +2,13 @@ from typing import Optional, Tuple
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_int_step
-from facewaeve.filesystem import is_image, is_video
-from facewaeve.typing import Fps, OutputAudioEncoder, OutputVideoEncoder, OutputVideoPreset
-from facewaeve.uis.core import get_ui_components, register_ui_component
-from facewaeve.vision import create_image_resolutions, create_video_resolutions, detect_image_resolution, detect_video_fps, detect_video_resolution, pack_resolution
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_int_step
+from faceweave.filesystem import is_image, is_video
+from faceweave.typing import Fps, OutputAudioEncoder, OutputVideoEncoder, OutputVideoPreset
+from faceweave.uis.core import get_ui_components, register_ui_component
+from faceweave.vision import create_image_resolutions, create_video_resolutions, detect_image_resolution, detect_video_fps, detect_video_resolution, pack_resolution
 
 OUTPUT_IMAGE_QUALITY_SLIDER : Optional[gradio.Slider] = None
 OUTPUT_IMAGE_RESOLUTION_DROPDOWN : Optional[gradio.Dropdown] = None
@@ -41,9 +41,9 @@ def render() -> None:
 	OUTPUT_IMAGE_QUALITY_SLIDER = gradio.Slider(
 		label = wording.get('uis.output_image_quality_slider'),
 		value = state_manager.get_item('output_image_quality'),
-		step = calc_int_step(facewaeve.choices.output_image_quality_range),
-		minimum = facewaeve.choices.output_image_quality_range[0],
-		maximum = facewaeve.choices.output_image_quality_range[-1],
+		step = calc_int_step(faceweave.choices.output_image_quality_range),
+		minimum = faceweave.choices.output_image_quality_range[0],
+		maximum = faceweave.choices.output_image_quality_range[-1],
 		visible = is_image(state_manager.get_item('target_path'))
 	)
 	OUTPUT_IMAGE_RESOLUTION_DROPDOWN = gradio.Dropdown(
@@ -54,28 +54,28 @@ def render() -> None:
 	)
 	OUTPUT_AUDIO_ENCODER_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.output_audio_encoder_dropdown'),
-		choices = facewaeve.choices.output_audio_encoders,
+		choices = faceweave.choices.output_audio_encoders,
 		value = state_manager.get_item('output_audio_encoder'),
 		visible = is_video(state_manager.get_item('target_path'))
 	)
 	OUTPUT_VIDEO_ENCODER_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.output_video_encoder_dropdown'),
-		choices = facewaeve.choices.output_video_encoders,
+		choices = faceweave.choices.output_video_encoders,
 		value = state_manager.get_item('output_video_encoder'),
 		visible = is_video(state_manager.get_item('target_path'))
 	)
 	OUTPUT_VIDEO_PRESET_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.output_video_preset_dropdown'),
-		choices = facewaeve.choices.output_video_presets,
+		choices = faceweave.choices.output_video_presets,
 		value = state_manager.get_item('output_video_preset'),
 		visible = is_video(state_manager.get_item('target_path'))
 	)
 	OUTPUT_VIDEO_QUALITY_SLIDER = gradio.Slider(
 		label = wording.get('uis.output_video_quality_slider'),
 		value = state_manager.get_item('output_video_quality'),
-		step = calc_int_step(facewaeve.choices.output_video_quality_range),
-		minimum = facewaeve.choices.output_video_quality_range[0],
-		maximum = facewaeve.choices.output_video_quality_range[-1],
+		step = calc_int_step(faceweave.choices.output_video_quality_range),
+		minimum = faceweave.choices.output_video_quality_range[0],
+		maximum = faceweave.choices.output_video_quality_range[-1],
 		visible = is_video(state_manager.get_item('target_path'))
 	)
 	OUTPUT_VIDEO_RESOLUTION_DROPDOWN = gradio.Dropdown(

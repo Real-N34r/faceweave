@@ -7,9 +7,9 @@ from typing import Optional
 import gradio
 from tqdm import tqdm
 
-from facewaeve import logger, state_manager, wording
-from facewaeve.choices import log_level_set
-from facewaeve.typing import LogLevel
+from faceweave import logger, state_manager, wording
+from faceweave.choices import log_level_set
+from faceweave.typing import LogLevel
 
 LOG_LEVEL_DROPDOWN : Optional[gradio.Dropdown] = None
 TERMINAL_TEXTBOX : Optional[gradio.Textbox] = None

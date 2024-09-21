@@ -1,5 +1,5 @@
-from facewaeve.common_helper import is_linux, is_macos
-from facewaeve.memory import limit_system_memory
+from faceweave.common_helper import is_linux, is_macos
+from faceweave.memory import limit_system_memory
 
 
 def test_limit_system_memory() -> None:

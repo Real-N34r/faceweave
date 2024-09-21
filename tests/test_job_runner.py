@@ -2,12 +2,12 @@ import subprocess
 
 import pytest
 
-from facewaeve import state_manager
-from facewaeve.download import conditional_download
-from facewaeve.filesystem import copy_file
-from facewaeve.jobs.job_manager import add_step, clear_jobs, create_job, init_jobs, submit_job, submit_jobs
-from facewaeve.jobs.job_runner import collect_output_set, finalize_steps, run_job, run_jobs, run_steps
-from facewaeve.typing import Args
+from faceweave import state_manager
+from faceweave.download import conditional_download
+from faceweave.filesystem import copy_file
+from faceweave.jobs.job_manager import add_step, clear_jobs, create_job, init_jobs, submit_job, submit_jobs
+from faceweave.jobs.job_runner import collect_output_set, finalize_steps, run_job, run_jobs, run_steps
+from faceweave.typing import Args
 from .helper import get_test_example_file, get_test_examples_directory, get_test_jobs_directory, get_test_output_file, is_test_output_file, prepare_test_output_directory
 
 

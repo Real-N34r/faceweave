@@ -2,15 +2,15 @@ from typing import List, Optional
 
 import numpy
 
-from facewaeve import state_manager
-from facewaeve.common_helper import get_first
-from facewaeve.face_classifier import classify_face
-from facewaeve.face_detector import detect_faces, detect_rotated_faces
-from facewaeve.face_helper import apply_nms, convert_to_face_landmark_5, estimate_face_angle, get_nms_threshold
-from facewaeve.face_landmarker import detect_face_landmarks, estimate_face_landmark_68_5
-from facewaeve.face_recognizer import calc_embedding
-from facewaeve.face_store import get_static_faces, set_static_faces
-from facewaeve.typing import BoundingBox, Face, FaceLandmark5, FaceLandmarkSet, FaceScoreSet, Score, VisionFrame
+from faceweave import state_manager
+from faceweave.common_helper import get_first
+from faceweave.face_classifier import classify_face
+from faceweave.face_detector import detect_faces, detect_rotated_faces
+from faceweave.face_helper import apply_nms, convert_to_face_landmark_5, estimate_face_angle, get_nms_threshold
+from faceweave.face_landmarker import detect_face_landmarks, estimate_face_landmark_68_5
+from faceweave.face_recognizer import calc_embedding
+from faceweave.face_store import get_static_faces, set_static_faces
+from faceweave.typing import BoundingBox, Face, FaceLandmark5, FaceLandmarkSet, FaceScoreSet, Score, VisionFrame
 
 
 def create_faces(vision_frame : VisionFrame, bounding_boxes : List[BoundingBox], face_scores : List[Score], face_landmarks_5 : List[FaceLandmark5]) -> List[Face]:

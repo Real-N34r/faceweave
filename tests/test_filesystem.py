@@ -2,9 +2,9 @@ import os.path
 
 import pytest
 
-from facewaeve.common_helper import is_windows
-from facewaeve.download import conditional_download
-from facewaeve.filesystem import copy_file, create_directory, filter_audio_paths, filter_image_paths, get_file_size, has_audio, has_image, in_directory, is_audio, is_directory, is_file, is_image, is_video, list_directory, remove_directory, same_file_extension, sanitize_path_for_windows
+from faceweave.common_helper import is_windows
+from faceweave.download import conditional_download
+from faceweave.filesystem import copy_file, create_directory, filter_audio_paths, filter_image_paths, get_file_size, has_audio, has_image, in_directory, is_audio, is_directory, is_file, is_image, is_video, list_directory, remove_directory, same_file_extension, sanitize_path_for_windows
 from .helper import get_test_example_file, get_test_examples_directory, get_test_outputs_directory
 
 

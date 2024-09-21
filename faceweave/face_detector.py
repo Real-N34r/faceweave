@@ -3,13 +3,13 @@ from typing import List, Tuple
 import cv2
 import numpy
 
-from facewaeve import inference_manager, state_manager
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.face_helper import create_rotated_matrix_and_size, create_static_anchors, distance_to_bounding_box, distance_to_face_landmark_5, normalize_bounding_box, transform_bounding_box, transform_points
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import thread_semaphore
-from facewaeve.typing import Angle, BoundingBox, Detection, DownloadSet, FaceLandmark5, InferencePool, ModelSet, Score, VisionFrame
-from facewaeve.vision import resize_frame_resolution, unpack_resolution
+from faceweave import inference_manager, state_manager
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.face_helper import create_rotated_matrix_and_size, create_static_anchors, distance_to_bounding_box, distance_to_face_landmark_5, normalize_bounding_box, transform_bounding_box, transform_points
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import thread_semaphore
+from faceweave.typing import Angle, BoundingBox, Detection, DownloadSet, FaceLandmark5, InferencePool, ModelSet, Score, VisionFrame
+from faceweave.vision import resize_frame_resolution, unpack_resolution
 
 MODEL_SET : ModelSet =\
 {

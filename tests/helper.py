@@ -1,8 +1,8 @@
 import os
 
-from facewaeve.filesystem import create_directory, is_directory, is_file, remove_directory
-from facewaeve.temp_helper import get_base_directory_path
-from facewaeve.typing import JobStatus
+from faceweave.filesystem import create_directory, is_directory, is_file, remove_directory
+from faceweave.temp_helper import get_base_directory_path
+from faceweave.typing import JobStatus
 
 
 def is_test_job_file(file_path : str, job_status : JobStatus) -> bool:

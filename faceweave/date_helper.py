@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
 
-from facewaeve import wording
+from faceweave import wording
 
 
 def get_current_date_time() -> datetime:

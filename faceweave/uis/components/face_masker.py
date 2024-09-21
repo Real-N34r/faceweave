@@ -2,11 +2,11 @@ from typing import List, Optional, Tuple
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_float_step, calc_int_step
-from facewaeve.typing import FaceMaskRegion, FaceMaskType
-from facewaeve.uis.core import register_ui_component
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_float_step, calc_int_step
+from faceweave.typing import FaceMaskRegion, FaceMaskType
+from faceweave.uis.core import register_ui_component
 
 FACE_MASK_TYPES_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
 FACE_MASK_REGIONS_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
@@ -30,20 +30,20 @@ def render() -> None:
 	has_region_mask = 'region' in state_manager.get_item('face_mask_types')
 	FACE_MASK_TYPES_CHECKBOX_GROUP = gradio.CheckboxGroup(
 		label = wording.get('uis.face_mask_types_checkbox_group'),
-		choices = facewaeve.choices.face_mask_types,
+		choices = faceweave.choices.face_mask_types,
 		value = state_manager.get_item('face_mask_types')
 	)
 	FACE_MASK_REGIONS_CHECKBOX_GROUP = gradio.CheckboxGroup(
 		label = wording.get('uis.face_mask_regions_checkbox_group'),
-		choices = facewaeve.choices.face_mask_regions,
+		choices = faceweave.choices.face_mask_regions,
 		value = state_manager.get_item('face_mask_regions'),
 		visible = has_region_mask
 	)
 	FACE_MASK_BLUR_SLIDER = gradio.Slider(
 		label = wording.get('uis.face_mask_blur_slider'),
-		step = calc_float_step(facewaeve.choices.face_mask_blur_range),
-		minimum = facewaeve.choices.face_mask_blur_range[0],
-		maximum = facewaeve.choices.face_mask_blur_range[-1],
+		step = calc_float_step(faceweave.choices.face_mask_blur_range),
+		minimum = faceweave.choices.face_mask_blur_range[0],
+		maximum = faceweave.choices.face_mask_blur_range[-1],
 		value = state_manager.get_item('face_mask_blur'),
 		visible = has_box_mask
 	)
@@ -51,34 +51,34 @@ def render() -> None:
 		with gradio.Row():
 			FACE_MASK_PADDING_TOP_SLIDER = gradio.Slider(
 				label = wording.get('uis.face_mask_padding_top_slider'),
-				step = calc_int_step(facewaeve.choices.face_mask_padding_range),
-				minimum = facewaeve.choices.face_mask_padding_range[0],
-				maximum = facewaeve.choices.face_mask_padding_range[-1],
+				step = calc_int_step(faceweave.choices.face_mask_padding_range),
+				minimum = faceweave.choices.face_mask_padding_range[0],
+				maximum = faceweave.choices.face_mask_padding_range[-1],
 				value = state_manager.get_item('face_mask_padding')[0],
 				visible = has_box_mask
 			)
 			FACE_MASK_PADDING_RIGHT_SLIDER = gradio.Slider(
 				label = wording.get('uis.face_mask_padding_right_slider'),
-				step = calc_int_step(facewaeve.choices.face_mask_padding_range),
-				minimum = facewaeve.choices.face_mask_padding_range[0],
-				maximum = facewaeve.choices.face_mask_padding_range[-1],
+				step = calc_int_step(faceweave.choices.face_mask_padding_range),
+				minimum = faceweave.choices.face_mask_padding_range[0],
+				maximum = faceweave.choices.face_mask_padding_range[-1],
 				value = state_manager.get_item('face_mask_padding')[1],
 				visible = has_box_mask
 			)
 		with gradio.Row():
 			FACE_MASK_PADDING_BOTTOM_SLIDER = gradio.Slider(
 				label = wording.get('uis.face_mask_padding_bottom_slider'),
-				step = calc_int_step(facewaeve.choices.face_mask_padding_range),
-				minimum = facewaeve.choices.face_mask_padding_range[0],
-				maximum = facewaeve.choices.face_mask_padding_range[-1],
+				step = calc_int_step(faceweave.choices.face_mask_padding_range),
+				minimum = faceweave.choices.face_mask_padding_range[0],
+				maximum = faceweave.choices.face_mask_padding_range[-1],
 				value = state_manager.get_item('face_mask_padding')[2],
 				visible = has_box_mask
 			)
 			FACE_MASK_PADDING_LEFT_SLIDER = gradio.Slider(
 				label = wording.get('uis.face_mask_padding_left_slider'),
-				step = calc_int_step(facewaeve.choices.face_mask_padding_range),
-				minimum = facewaeve.choices.face_mask_padding_range[0],
-				maximum = facewaeve.choices.face_mask_padding_range[-1],
+				step = calc_int_step(faceweave.choices.face_mask_padding_range),
+				minimum = faceweave.choices.face_mask_padding_range[0],
+				maximum = faceweave.choices.face_mask_padding_range[-1],
 				value = state_manager.get_item('face_mask_padding')[3],
 				visible = has_box_mask
 			)
@@ -101,7 +101,7 @@ def listen() -> None:
 
 
 def update_face_mask_types(face_mask_types : List[FaceMaskType]) -> Tuple[gradio.CheckboxGroup, gradio.CheckboxGroup, gradio.Slider, gradio.Slider, gradio.Slider, gradio.Slider, gradio.Slider]:
-	face_mask_types = face_mask_types or facewaeve.choices.face_mask_types
+	face_mask_types = face_mask_types or faceweave.choices.face_mask_types
 	state_manager.set_item('face_mask_types', face_mask_types)
 	has_box_mask = 'box' in face_mask_types
 	has_region_mask = 'region' in face_mask_types
@@ -109,7 +109,7 @@ def update_face_mask_types(face_mask_types : List[FaceMaskType]) -> Tuple[gradio
 
 
 def update_face_mask_regions(face_mask_regions : List[FaceMaskRegion]) -> gradio.CheckboxGroup:
-	face_mask_regions = face_mask_regions or facewaeve.choices.face_mask_regions
+	face_mask_regions = face_mask_regions or faceweave.choices.face_mask_regions
 	state_manager.set_item('face_mask_regions', face_mask_regions)
 	return gradio.CheckboxGroup(value = state_manager.get_item('face_mask_regions'))
 

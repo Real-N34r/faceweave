@@ -2,10 +2,10 @@ from typing import List, Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.filesystem import list_directory
-from facewaeve.processors.core import clear_processors_modules, get_processors_modules
-from facewaeve.uis.core import register_ui_component
+from faceweave import state_manager, wording
+from faceweave.filesystem import list_directory
+from faceweave.processors.core import clear_processors_modules, get_processors_modules
+from faceweave.uis.core import register_ui_component
 
 PROCESSORS_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
 
@@ -36,5 +36,5 @@ def update_processors(processors : List[str]) -> gradio.CheckboxGroup:
 
 
 def sort_processors(processors : List[str]) -> List[str]:
-	available_processors = list_directory('facewaeve/processors/modules')
+	available_processors = list_directory('faceweave/processors/modules')
 	return sorted(available_processors, key = lambda processor : processors.index(processor) if processor in processors else len(processors))

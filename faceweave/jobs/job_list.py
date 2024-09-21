@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Optional, Tuple
 
-from facewaeve.date_helper import describe_time_ago
-from facewaeve.jobs import job_manager
-from facewaeve.typing import JobStatus, TableContents, TableHeaders
+from faceweave.date_helper import describe_time_ago
+from faceweave.jobs import job_manager
+from faceweave.typing import JobStatus, TableContents, TableHeaders
 
 
 def compose_job_list(job_status : JobStatus) -> Tuple[TableHeaders, TableContents]:

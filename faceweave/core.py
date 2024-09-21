@@ -5,27 +5,27 @@ from time import time
 
 import numpy
 
-from facewaeve import content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, logger, process_manager, state_manager, voice_extractor, wording
-from facewaeve.args import apply_args, collect_job_args, reduce_step_args
-from facewaeve.common_helper import get_first
-from facewaeve.content_analyser import analyse_image, analyse_video
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.exit_helper import conditional_exit, graceful_exit, hard_exit
-from facewaeve.face_analyser import get_average_face, get_many_faces, get_one_face
-from facewaeve.face_selector import sort_and_filter_faces
-from facewaeve.face_store import append_reference_face, clear_reference_faces, get_reference_faces
-from facewaeve.ffmpeg import copy_image, extract_frames, finalize_image, merge_video, replace_audio, restore_audio
-from facewaeve.filesystem import filter_audio_paths, is_image, is_video, list_directory, resolve_relative_path
-from facewaeve.jobs import job_helper, job_manager, job_runner
-from facewaeve.jobs.job_list import compose_job_list
-from facewaeve.memory import limit_system_memory
-from facewaeve.processors.core import get_processors_modules
-from facewaeve.program import create_program
-from facewaeve.program_helper import validate_args
-from facewaeve.statistics import conditional_log_statistics
-from facewaeve.temp_helper import clear_temp_directory, create_temp_directory, get_temp_file_path, get_temp_frame_paths, move_temp_file
-from facewaeve.typing import Args, ErrorCode
-from facewaeve.vision import get_video_frame, pack_resolution, read_image, read_static_images, restrict_image_resolution, restrict_video_fps, restrict_video_resolution, unpack_resolution
+from faceweave import content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, logger, process_manager, state_manager, voice_extractor, wording
+from faceweave.args import apply_args, collect_job_args, reduce_step_args
+from faceweave.common_helper import get_first
+from faceweave.content_analyser import analyse_image, analyse_video
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.exit_helper import conditional_exit, graceful_exit, hard_exit
+from faceweave.face_analyser import get_average_face, get_many_faces, get_one_face
+from faceweave.face_selector import sort_and_filter_faces
+from faceweave.face_store import append_reference_face, clear_reference_faces, get_reference_faces
+from faceweave.ffmpeg import copy_image, extract_frames, finalize_image, merge_video, replace_audio, restore_audio
+from faceweave.filesystem import filter_audio_paths, is_image, is_video, list_directory, resolve_relative_path
+from faceweave.jobs import job_helper, job_manager, job_runner
+from faceweave.jobs.job_list import compose_job_list
+from faceweave.memory import limit_system_memory
+from faceweave.processors.core import get_processors_modules
+from faceweave.program import create_program
+from faceweave.program_helper import validate_args
+from faceweave.statistics import conditional_log_statistics
+from faceweave.temp_helper import clear_temp_directory, create_temp_directory, get_temp_file_path, get_temp_frame_paths, move_temp_file
+from faceweave.typing import Args, ErrorCode
+from faceweave.vision import get_video_frame, pack_resolution, read_image, read_static_images, restrict_image_resolution, restrict_video_fps, restrict_video_resolution, unpack_resolution
 
 
 def cli() -> None:
@@ -58,7 +58,7 @@ def route(args : Args) -> None:
 	if not pre_check():
 		return conditional_exit(2)
 	if state_manager.get_item('command') == 'run':
-		import facewaeve.uis.core as ui
+		import faceweave.uis.core as ui
 
 		if not common_pre_check() or not processors_pre_check():
 			return conditional_exit(2)
@@ -150,7 +150,7 @@ def conditional_append_reference_faces() -> None:
 
 def force_download() -> ErrorCode:
 	download_directory_path = resolve_relative_path('../.assets/models')
-	available_processors = list_directory('facewaeve/processors/modules')
+	available_processors = list_directory('faceweave/processors/modules')
 	common_modules =\
 	[
 		content_analyser,

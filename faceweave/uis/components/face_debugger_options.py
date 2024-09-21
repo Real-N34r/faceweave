@@ -2,10 +2,10 @@ from typing import List, Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.typing import FaceDebuggerItem
-from facewaeve.uis.core import get_ui_component, register_ui_component
+from faceweave import state_manager, wording
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.typing import FaceDebuggerItem
+from faceweave.uis.core import get_ui_component, register_ui_component
 
 FACE_DEBUGGER_ITEMS_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
 

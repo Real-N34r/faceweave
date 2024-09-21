@@ -2,7 +2,7 @@ import threading
 from contextlib import nullcontext
 from typing import ContextManager, Union
 
-from facewaeve.execution import has_execution_provider
+from faceweave.execution import has_execution_provider
 
 THREAD_LOCK : threading.Lock = threading.Lock()
 THREAD_SEMAPHORE : threading.Semaphore = threading.Semaphore()

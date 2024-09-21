@@ -2,8 +2,8 @@ import subprocess
 
 import pytest
 
-from facewaeve.audio import get_audio_frame, read_static_audio
-from facewaeve.download import conditional_download
+from faceweave.audio import get_audio_frame, read_static_audio
+from faceweave.download import conditional_download
 from .helper import get_test_example_file, get_test_examples_directory
 
 

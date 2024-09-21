@@ -3,8 +3,8 @@ import os
 import tempfile
 from typing import List
 
-from facewaeve import state_manager
-from facewaeve.filesystem import create_directory, move_file, remove_directory
+from faceweave import state_manager
+from faceweave.filesystem import create_directory, move_file, remove_directory
 
 
 def get_temp_file_path(file_path : str) -> str:
@@ -29,7 +29,7 @@ def get_temp_frames_pattern(target_path : str, temp_frame_prefix : str) -> str:
 
 
 def get_base_directory_path() -> str:
-	return os.path.join(tempfile.gettempdir(), 'facewaeve')
+	return os.path.join(tempfile.gettempdir(), 'faceweave')
 
 
 def create_base_directory() -> bool:

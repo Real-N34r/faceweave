@@ -1,7 +1,7 @@
 import gradio
 
-from facewaeve import state_manager
-from facewaeve.uis.components import about, job_list, job_list_options
+from faceweave import state_manager
+from faceweave.uis.components import about, job_list, job_list_options
 
 
 def pre_check() -> bool:
@@ -32,4 +32,4 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	ui.launch(favicon_path = 'facewaeve.ico', inbrowser = state_manager.get_item('open_browser'))
+	ui.launch(favicon_path = 'faceweave.ico', inbrowser = state_manager.get_item('open_browser'))

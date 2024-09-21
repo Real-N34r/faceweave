@@ -2,12 +2,12 @@ from typing import List, Optional
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import get_first
-from facewaeve.jobs import job_list, job_manager
-from facewaeve.typing import JobStatus
-from facewaeve.uis.core import get_ui_component
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import get_first
+from faceweave.jobs import job_list, job_manager
+from faceweave.typing import JobStatus
+from faceweave.uis.core import get_ui_component
 
 JOB_LIST_JOBS_DATAFRAME : Optional[gradio.Dataframe] = None
 JOB_LIST_REFRESH_BUTTON : Optional[gradio.Button] = None
@@ -18,7 +18,7 @@ def render() -> None:
 	global JOB_LIST_REFRESH_BUTTON
 
 	if job_manager.init_jobs(state_manager.get_item('jobs_path')):
-		job_status = get_first(facewaeve.choices.job_statuses)
+		job_status = get_first(faceweave.choices.job_statuses)
 		job_headers, job_contents = job_list.compose_job_list(job_status)
 
 		JOB_LIST_JOBS_DATAFRAME = gradio.Dataframe(

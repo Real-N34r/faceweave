@@ -2,11 +2,11 @@ from typing import Optional
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.filesystem import is_video
-from facewaeve.typing import TempFrameFormat
-from facewaeve.uis.core import get_ui_component
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.filesystem import is_video
+from faceweave.typing import TempFrameFormat
+from faceweave.uis.core import get_ui_component
 
 TEMP_FRAME_FORMAT_DROPDOWN : Optional[gradio.Dropdown] = None
 
@@ -16,7 +16,7 @@ def render() -> None:
 
 	TEMP_FRAME_FORMAT_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.temp_frame_format_dropdown'),
-		choices = facewaeve.choices.temp_frame_formats,
+		choices = faceweave.choices.temp_frame_formats,
 		value = state_manager.get_item('temp_frame_format'),
 		visible = is_video(state_manager.get_item('target_path'))
 	)

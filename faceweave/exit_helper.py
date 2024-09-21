@@ -1,9 +1,9 @@
 import sys
 from time import sleep
 
-from facewaeve import process_manager, state_manager
-from facewaeve.temp_helper import clear_temp_directory
-from facewaeve.typing import ErrorCode
+from faceweave import process_manager, state_manager
+from faceweave.temp_helper import clear_temp_directory
+from faceweave.typing import ErrorCode
 
 
 def hard_exit(error_code : ErrorCode) -> None:

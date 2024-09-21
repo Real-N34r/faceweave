@@ -1,6 +1,6 @@
 from typing import List
 
-from facewaeve.typing import JobStore
+from faceweave.typing import JobStore
 
 JOB_STORE : JobStore =\
 {

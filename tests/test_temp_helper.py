@@ -3,9 +3,9 @@ import tempfile
 
 import pytest
 
-from facewaeve import state_manager
-from facewaeve.download import conditional_download
-from facewaeve.temp_helper import get_temp_directory_path, get_temp_file_path, get_temp_frames_pattern
+from faceweave import state_manager
+from faceweave.download import conditional_download
+from faceweave.temp_helper import get_temp_directory_path, get_temp_file_path, get_temp_frames_pattern
 from .helper import get_test_example_file, get_test_examples_directory
 
 
@@ -20,14 +20,14 @@ def before_all() -> None:
 
 def test_get_temp_file_path() -> None:
 	temp_directory = tempfile.gettempdir()
-	assert get_temp_file_path(get_test_example_file('target-240p.mp4')) == os.path.join(temp_directory, 'facewaeve', 'target-240p', 'temp.mp4')
+	assert get_temp_file_path(get_test_example_file('target-240p.mp4')) == os.path.join(temp_directory, 'faceweave', 'target-240p', 'temp.mp4')
 
 
 def test_get_temp_directory_path() -> None:
 	temp_directory = tempfile.gettempdir()
-	assert get_temp_directory_path(get_test_example_file('target-240p.mp4')) == os.path.join(temp_directory, 'facewaeve', 'target-240p')
+	assert get_temp_directory_path(get_test_example_file('target-240p.mp4')) == os.path.join(temp_directory, 'faceweave', 'target-240p')
 
 
 def test_get_temp_frames_pattern() -> None:
 	temp_directory = tempfile.gettempdir()
-	assert get_temp_frames_pattern(get_test_example_file('target-240p.mp4'), '%04d') == os.path.join(temp_directory, 'facewaeve', 'target-240p', '%04d.png')
+	assert get_temp_frames_pattern(get_test_example_file('target-240p.mp4'), '%04d') == os.path.join(temp_directory, 'faceweave', 'target-240p', '%04d.png')

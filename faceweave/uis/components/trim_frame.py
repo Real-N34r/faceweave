@@ -2,12 +2,12 @@ from typing import Optional, Tuple
 
 from gradio_rangeslider import RangeSlider
 
-from facewaeve import state_manager, wording
-from facewaeve.face_store import clear_static_faces
-from facewaeve.filesystem import is_video
-from facewaeve.uis.core import get_ui_components
-from facewaeve.uis.typing import ComponentOptions
-from facewaeve.vision import count_video_frame_total
+from faceweave import state_manager, wording
+from faceweave.face_store import clear_static_faces
+from faceweave.filesystem import is_video
+from faceweave.uis.core import get_ui_components
+from faceweave.uis.typing import ComponentOptions
+from faceweave.vision import count_video_frame_total
 
 TRIM_FRAME_RANGE_SLIDER : Optional[RangeSlider] = None
 

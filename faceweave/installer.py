@@ -7,8 +7,8 @@ import tempfile
 from argparse import ArgumentParser, HelpFormatter
 from typing import Dict, Tuple
 
-from facewaeve import metadata, wording
-from facewaeve.common_helper import is_linux, is_macos, is_windows
+from faceweave import metadata, wording
+from faceweave.common_helper import is_linux, is_macos, is_windows
 
 ONNXRUNTIMES : Dict[str, Tuple[str, str]] = {}
 

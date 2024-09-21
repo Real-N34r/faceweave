@@ -2,8 +2,8 @@ import hashlib
 import os
 from typing import Optional
 
-from facewaeve import state_manager
-from facewaeve.filesystem import is_image, is_video
+from faceweave import state_manager
+from faceweave.filesystem import is_image, is_video
 
 
 def convert_int_none(value : int) -> Optional[int]:

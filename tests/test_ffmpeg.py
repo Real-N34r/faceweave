@@ -3,10 +3,10 @@ import subprocess
 
 import pytest
 
-from facewaeve import process_manager, state_manager
-from facewaeve.download import conditional_download
-from facewaeve.ffmpeg import concat_video, extract_frames, read_audio_buffer
-from facewaeve.temp_helper import clear_temp_directory, create_temp_directory, get_temp_directory_path
+from faceweave import process_manager, state_manager
+from faceweave.download import conditional_download
+from faceweave.ffmpeg import concat_video, extract_frames, read_audio_buffer
+from faceweave.temp_helper import clear_temp_directory, create_temp_directory, get_temp_directory_path
 from .helper import get_test_example_file, get_test_examples_directory, get_test_output_file, prepare_test_output_directory
 
 

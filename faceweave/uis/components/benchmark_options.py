@@ -2,9 +2,9 @@ from typing import Optional
 
 import gradio
 
-from facewaeve import wording
-from facewaeve.uis.components.benchmark import BENCHMARKS
-from facewaeve.uis.core import register_ui_component
+from faceweave import wording
+from faceweave.uis.components.benchmark import BENCHMARKS
+from faceweave.uis.core import register_ui_component
 
 BENCHMARK_RUNS_CHECKBOX_GROUP : Optional[gradio.CheckboxGroup] = None
 BENCHMARK_CYCLES_SLIDER : Optional[gradio.Button] = None

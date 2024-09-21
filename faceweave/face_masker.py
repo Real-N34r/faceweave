@@ -5,11 +5,11 @@ import cv2
 import numpy
 from cv2.typing import Size
 
-from facewaeve import inference_manager
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import conditional_thread_semaphore
-from facewaeve.typing import DownloadSet, FaceLandmark68, FaceMaskRegion, InferencePool, Mask, ModelSet, Padding, VisionFrame
+from faceweave import inference_manager
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import conditional_thread_semaphore
+from faceweave.typing import DownloadSet, FaceLandmark68, FaceMaskRegion, InferencePool, Mask, ModelSet, Padding, VisionFrame
 
 MODEL_SET : ModelSet =\
 {

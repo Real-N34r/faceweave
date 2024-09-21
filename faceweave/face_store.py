@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import numpy
 
-from facewaeve.typing import Face, FaceSet, FaceStore, VisionFrame
+from faceweave.typing import Face, FaceSet, FaceStore, VisionFrame
 
 FACE_STORE : FaceStore =\
 {

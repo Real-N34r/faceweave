@@ -6,11 +6,11 @@ from typing import List, Optional
 
 import filetype
 
-from facewaeve import logger, process_manager, state_manager
-from facewaeve.filesystem import remove_file
-from facewaeve.temp_helper import get_temp_file_path, get_temp_frames_pattern
-from facewaeve.typing import AudioBuffer, Fps, OutputVideoPreset
-from facewaeve.vision import restrict_video_fps
+from faceweave import logger, process_manager, state_manager
+from faceweave.filesystem import remove_file
+from faceweave.temp_helper import get_temp_file_path, get_temp_frames_pattern
+from faceweave.typing import AudioBuffer, Fps, OutputVideoPreset
+from faceweave.vision import restrict_video_fps
 
 
 def run_ffmpeg(args : List[str]) -> subprocess.Popen[bytes]:

@@ -2,9 +2,9 @@ from typing import Optional
 
 import gradio
 
-import facewaeve
-from facewaeve import state_manager, wording
-from facewaeve.uis.core import register_ui_component
+import faceweave
+from faceweave import state_manager, wording
+from faceweave.uis.core import register_ui_component
 
 UI_WORKFLOW_DROPDOWN : Optional[gradio.Dropdown] = None
 
@@ -14,7 +14,7 @@ def render() -> None:
 
 	UI_WORKFLOW_DROPDOWN = gradio.Dropdown(
 		label = wording.get('uis.ui_workflow'),
-		choices = facewaeve.choices.ui_workflows,
+		choices = faceweave.choices.ui_workflows,
 		value = state_manager.get_item('ui_workflow'),
 		interactive = True
 	)

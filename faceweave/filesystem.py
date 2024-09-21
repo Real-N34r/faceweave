@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import filetype
 
-from facewaeve.common_helper import is_windows
+from faceweave.common_helper import is_windows
 
 if is_windows():
 	import ctypes

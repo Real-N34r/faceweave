@@ -2,7 +2,7 @@ import os
 import zlib
 from typing import Optional
 
-from facewaeve.filesystem import is_file
+from faceweave.filesystem import is_file
 
 
 def create_hash(content : bytes) -> str:

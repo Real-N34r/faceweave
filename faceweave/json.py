@@ -2,8 +2,8 @@ import json
 from json import JSONDecodeError
 from typing import Optional
 
-from facewaeve.filesystem import is_file
-from facewaeve.typing import Content
+from faceweave.filesystem import is_file
+from faceweave.typing import Content
 
 
 def read_json(json_path : str) -> Optional[Content]:

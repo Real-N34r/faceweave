@@ -1,7 +1,7 @@
 from typing import List, Sequence
 
-from facewaeve.common_helper import create_float_range, create_int_range
-from facewaeve.processors.typing import AgeModifierModel, ExpressionRestorerModel, FaceDebuggerItem, FaceEditorModel, FaceEnhancerModel, FaceSwapperSet, FrameColorizerModel, FrameEnhancerModel, LipSyncerModel
+from faceweave.common_helper import create_float_range, create_int_range
+from faceweave.processors.typing import AgeModifierModel, ExpressionRestorerModel, FaceDebuggerItem, FaceEditorModel, FaceEnhancerModel, FaceSwapperSet, FrameColorizerModel, FrameEnhancerModel, LipSyncerModel
 
 age_modifier_models : List[AgeModifierModel] = [ 'styleganex_age' ]
 expression_restorer_models : List[ExpressionRestorerModel] = [ 'live_portrait' ]

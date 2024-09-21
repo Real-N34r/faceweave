@@ -3,27 +3,27 @@ from typing import List, Tuple
 
 import numpy
 
-import facewaeve.jobs.job_manager
-import facewaeve.jobs.job_store
-import facewaeve.processors.core as processors
-from facewaeve import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
-from facewaeve.common_helper import get_first
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.execution import has_execution_provider
-from facewaeve.face_analyser import get_average_face, get_many_faces, get_one_face
-from facewaeve.face_helper import paste_back, warp_face_by_face_landmark_5
-from facewaeve.face_masker import create_occlusion_mask, create_region_mask, create_static_box_mask
-from facewaeve.face_selector import find_similar_faces, sort_and_filter_faces
-from facewaeve.face_store import get_reference_faces
-from facewaeve.filesystem import filter_image_paths, has_image, in_directory, is_image, is_video, resolve_relative_path, same_file_extension
-from facewaeve.inference_manager import get_static_model_initializer
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.pixel_boost import explode_pixel_boost, implode_pixel_boost
-from facewaeve.processors.typing import FaceSwapperInputs
-from facewaeve.program_helper import find_argument_group, suggest_face_swapper_pixel_boost_choices
-from facewaeve.thread_helper import conditional_thread_semaphore
-from facewaeve.typing import ApplyStateItem, Args, Embedding, Face, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
-from facewaeve.vision import read_image, read_static_image, read_static_images, unpack_resolution, write_image
+import faceweave.jobs.job_manager
+import faceweave.jobs.job_store
+import faceweave.processors.core as processors
+from faceweave import config, content_analyser, face_classifier, face_detector, face_landmarker, face_masker, face_recognizer, inference_manager, logger, process_manager, state_manager, wording
+from faceweave.common_helper import get_first
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.execution import has_execution_provider
+from faceweave.face_analyser import get_average_face, get_many_faces, get_one_face
+from faceweave.face_helper import paste_back, warp_face_by_face_landmark_5
+from faceweave.face_masker import create_occlusion_mask, create_region_mask, create_static_box_mask
+from faceweave.face_selector import find_similar_faces, sort_and_filter_faces
+from faceweave.face_store import get_reference_faces
+from faceweave.filesystem import filter_image_paths, has_image, in_directory, is_image, is_video, resolve_relative_path, same_file_extension
+from faceweave.inference_manager import get_static_model_initializer
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.pixel_boost import explode_pixel_boost, implode_pixel_boost
+from faceweave.processors.typing import FaceSwapperInputs
+from faceweave.program_helper import find_argument_group, suggest_face_swapper_pixel_boost_choices
+from faceweave.thread_helper import conditional_thread_semaphore
+from faceweave.typing import ApplyStateItem, Args, Embedding, Face, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
+from faceweave.vision import read_image, read_static_image, read_static_images, unpack_resolution, write_image
 
 MODEL_SET : ModelSet =\
 {
@@ -319,7 +319,7 @@ def register_args(program : ArgumentParser) -> None:
 		group_processors.add_argument('--face-swapper-model', help = wording.get('help.face_swapper_model'), default = config.get_str_value('processors.face_swapper_model', 'inswapper_128_fp16'), choices = processors_choices.face_swapper_set.keys())
 		face_swapper_pixel_boost_choices = suggest_face_swapper_pixel_boost_choices(program)
 		group_processors.add_argument('--face-swapper-pixel-boost', help = wording.get('help.face_swapper_pixel_boost'), default = config.get_str_value('processors.face_swapper_pixel_boost', get_first(face_swapper_pixel_boost_choices)), choices = face_swapper_pixel_boost_choices)
-		facewaeve.jobs.job_store.register_step_keys([ 'face_swapper_model', 'face_swapper_pixel_boost' ])
+		faceweave.jobs.job_store.register_step_keys([ 'face_swapper_model', 'face_swapper_pixel_boost' ])
 
 
 def apply_args(args : Args, apply_state_item : ApplyStateItem) -> None:

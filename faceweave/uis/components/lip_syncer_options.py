@@ -2,11 +2,11 @@ from typing import List, Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.core import load_processor_module
-from facewaeve.processors.typing import LipSyncerModel
-from facewaeve.uis.core import get_ui_component, register_ui_component
+from faceweave import state_manager, wording
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.core import load_processor_module
+from faceweave.processors.typing import LipSyncerModel
+from faceweave.uis.core import get_ui_component, register_ui_component
 
 LIP_SYNCER_MODEL_DROPDOWN : Optional[gradio.Dropdown] = None
 

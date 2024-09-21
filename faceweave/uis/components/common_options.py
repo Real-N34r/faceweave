@@ -2,8 +2,8 @@ from typing import List, Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.uis import choices as uis_choices
+from faceweave import state_manager, wording
+from faceweave.uis import choices as uis_choices
 
 COMMON_OPTIONS_CHECKBOX_GROUP : Optional[gradio.Checkboxgroup] = None
 

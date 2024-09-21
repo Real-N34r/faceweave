@@ -2,12 +2,12 @@ from typing import List, Optional, Tuple
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_float_step
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.core import load_processor_module
-from facewaeve.processors.typing import AgeModifierModel
-from facewaeve.uis.core import get_ui_component, register_ui_component
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_float_step
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.core import load_processor_module
+from faceweave.processors.typing import AgeModifierModel
+from faceweave.uis.core import get_ui_component, register_ui_component
 
 AGE_MODIFIER_MODEL_DROPDOWN : Optional[gradio.Dropdown] = None
 AGE_MODIFIER_DIRECTION_SLIDER : Optional[gradio.Slider] = None

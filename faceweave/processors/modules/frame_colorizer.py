@@ -4,19 +4,19 @@ from typing import List
 import cv2
 import numpy
 
-import facewaeve.jobs.job_manager
-import facewaeve.jobs.job_store
-import facewaeve.processors.core as processors
-from facewaeve import config, content_analyser, inference_manager, logger, process_manager, state_manager, wording
-from facewaeve.common_helper import create_int_metavar
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
-from facewaeve.processors import choices as processors_choices
-from facewaeve.processors.typing import FrameColorizerInputs
-from facewaeve.program_helper import find_argument_group
-from facewaeve.thread_helper import thread_semaphore
-from facewaeve.typing import ApplyStateItem, Args, Face, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
-from facewaeve.vision import read_image, read_static_image, unpack_resolution, write_image
+import faceweave.jobs.job_manager
+import faceweave.jobs.job_store
+import faceweave.processors.core as processors
+from faceweave import config, content_analyser, inference_manager, logger, process_manager, state_manager, wording
+from faceweave.common_helper import create_int_metavar
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.filesystem import in_directory, is_image, is_video, resolve_relative_path, same_file_extension
+from faceweave.processors import choices as processors_choices
+from faceweave.processors.typing import FrameColorizerInputs
+from faceweave.program_helper import find_argument_group
+from faceweave.thread_helper import thread_semaphore
+from faceweave.typing import ApplyStateItem, Args, Face, InferencePool, ModelOptions, ModelSet, ProcessMode, QueuePayload, UpdateProgress, VisionFrame
+from faceweave.vision import read_image, read_static_image, unpack_resolution, write_image
 
 MODEL_SET : ModelSet =\
 {
@@ -145,7 +145,7 @@ def register_args(program : ArgumentParser) -> None:
 		group_processors.add_argument('--frame-colorizer-model', help = wording.get('help.frame_colorizer_model'), default = config.get_str_value('processors.frame_colorizer_model', 'ddcolor'), choices = processors_choices.frame_colorizer_models)
 		group_processors.add_argument('--frame-colorizer-blend', help = wording.get('help.frame_colorizer_blend'), type = int, default = config.get_int_value('processors.frame_colorizer_blend', '100'), choices = processors_choices.frame_colorizer_blend_range, metavar = create_int_metavar(processors_choices.frame_colorizer_blend_range))
 		group_processors.add_argument('--frame-colorizer-size', help = wording.get('help.frame_colorizer_size'), type = str, default = config.get_str_value('processors.frame_colorizer_size', '256x256'), choices = processors_choices.frame_colorizer_sizes)
-		facewaeve.jobs.job_store.register_step_keys([ 'frame_colorizer_model', 'frame_colorizer_blend', 'frame_colorizer_size' ])
+		faceweave.jobs.job_store.register_step_keys([ 'frame_colorizer_model', 'frame_colorizer_blend', 'frame_colorizer_size' ])
 
 
 def apply_args(args : Args, apply_state_item : ApplyStateItem) -> None:

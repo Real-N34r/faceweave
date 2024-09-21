@@ -3,7 +3,7 @@ from typing import Tuple
 import numpy
 import scipy
 
-from facewaeve.processors.typing import LivePortraitExpression, LivePortraitPitch, LivePortraitRoll, LivePortraitRotation, LivePortraitYaw
+from faceweave.processors.typing import LivePortraitExpression, LivePortraitPitch, LivePortraitRoll, LivePortraitRotation, LivePortraitYaw
 
 EXPRESSION_MIN = numpy.array(
 [

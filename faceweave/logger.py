@@ -1,9 +1,9 @@
 from logging import Logger, basicConfig, getLogger
 from typing import Tuple
 
-from facewaeve.choices import log_level_set
-from facewaeve.common_helper import get_first, get_last
-from facewaeve.typing import LogLevel, TableContents, TableHeaders
+from faceweave.choices import log_level_set
+from faceweave.common_helper import get_first, get_last
+from faceweave.typing import LogLevel, TableContents, TableHeaders
 
 
 def init(log_level : LogLevel) -> None:
@@ -12,7 +12,7 @@ def init(log_level : LogLevel) -> None:
 
 
 def get_package_logger() -> Logger:
-	return getLogger('facewaeve')
+	return getLogger('faceweave')
 
 
 def debug(message : str, module_name : str) -> None:

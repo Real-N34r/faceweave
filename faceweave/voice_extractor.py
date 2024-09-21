@@ -3,11 +3,11 @@ from typing import Tuple
 import numpy
 import scipy
 
-from facewaeve import inference_manager
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import thread_semaphore
-from facewaeve.typing import Audio, AudioChunk, InferencePool, ModelOptions, ModelSet
+from faceweave import inference_manager
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import thread_semaphore
+from faceweave.typing import Audio, AudioChunk, InferencePool, ModelOptions, ModelSet
 
 MODEL_SET : ModelSet =\
 {

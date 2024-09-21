@@ -5,8 +5,8 @@ from typing import Any, List
 
 from onnxruntime import get_available_providers, set_default_logger_severity
 
-from facewaeve.choices import execution_provider_set
-from facewaeve.typing import ExecutionDevice, ExecutionProviderKey, ExecutionProviderSet, ExecutionProviderValue, ValueAndUnit
+from faceweave.choices import execution_provider_set
+from faceweave.typing import ExecutionDevice, ExecutionProviderKey, ExecutionProviderSet, ExecutionProviderValue, ValueAndUnit
 
 set_default_logger_severity(3)
 

@@ -1,6 +1,6 @@
 import os
 
-from facewaeve.jobs.job_helper import get_step_output_path
+from faceweave.jobs.job_helper import get_step_output_path
 
 
 def test_get_step_output_path() -> None:

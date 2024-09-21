@@ -2,9 +2,9 @@ from typing import Optional
 
 import gradio
 
-import facewaeve.choices
-from facewaeve import state_manager, wording
-from facewaeve.common_helper import calc_int_step
+import faceweave.choices
+from faceweave import state_manager, wording
+from faceweave.common_helper import calc_int_step
 
 EXECUTION_THREAD_COUNT_SLIDER : Optional[gradio.Slider] = None
 
@@ -15,9 +15,9 @@ def render() -> None:
 	EXECUTION_THREAD_COUNT_SLIDER = gradio.Slider(
 		label = wording.get('uis.execution_thread_count_slider'),
 		value = state_manager.get_item('execution_thread_count'),
-		step = calc_int_step(facewaeve.choices.execution_thread_count_range),
-		minimum = facewaeve.choices.execution_thread_count_range[0],
-		maximum = facewaeve.choices.execution_thread_count_range[-1]
+		step = calc_int_step(faceweave.choices.execution_thread_count_range),
+		minimum = faceweave.choices.execution_thread_count_range[0],
+		maximum = faceweave.choices.execution_thread_count_range[-1]
 	)
 
 

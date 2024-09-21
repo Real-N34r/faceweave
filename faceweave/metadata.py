@@ -2,12 +2,12 @@ from typing import Optional
 
 METADATA =\
 {
-	'name': 'facewaeve',
+	'name': 'faceweave',
 	'description': 'Industry leading face manipulation platform',
 	'version': '3.0.0',
 	'license': 'MIT',
 	'author': '#',
-	'url': 'https://facewaeve.io'
+	'url': 'https://faceweave.io'
 }
 
 

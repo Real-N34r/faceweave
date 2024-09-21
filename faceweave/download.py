@@ -9,11 +9,11 @@ from urllib.parse import urlparse
 
 from tqdm import tqdm
 
-from facewaeve import logger, process_manager, state_manager, wording
-from facewaeve.common_helper import is_macos
-from facewaeve.filesystem import get_file_size, is_file, remove_file
-from facewaeve.hash_helper import validate_hash
-from facewaeve.typing import DownloadSet
+from faceweave import logger, process_manager, state_manager, wording
+from faceweave.common_helper import is_macos
+from faceweave.filesystem import get_file_size, is_file, remove_file
+from faceweave.hash_helper import validate_hash
+from faceweave.typing import DownloadSet
 
 if is_macos():
 	ssl._create_default_https_context = ssl._create_unverified_context

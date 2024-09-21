@@ -1,4 +1,4 @@
-from facewaeve.execution import create_execution_providers, get_execution_provider_choices, has_execution_provider
+from faceweave.execution import create_execution_providers, get_execution_provider_choices, has_execution_provider
 
 
 def test_get_execution_provider_choices() -> None:

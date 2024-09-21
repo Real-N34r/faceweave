@@ -2,8 +2,8 @@ from typing import List
 
 import numpy
 
-from facewaeve import state_manager
-from facewaeve.typing import Face, FaceSelectorOrder, FaceSet, Gender, Race
+from faceweave import state_manager
+from faceweave.typing import Face, FaceSelectorOrder, FaceSet, Gender, Race
 
 
 def find_similar_faces(faces : List[Face], reference_faces : FaceSet, face_distance : float) -> List[Face]:

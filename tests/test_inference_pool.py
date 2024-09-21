@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from onnxruntime import InferenceSession
 
-from facewaeve import content_analyser, state_manager
-from facewaeve.inference_manager import INFERENCE_POOLS, get_inference_pool
+from faceweave import content_analyser, state_manager
+from faceweave.inference_manager import INFERENCE_POOLS, get_inference_pool
 
 
 @pytest.fixture(scope = 'module', autouse = True)
@@ -17,12 +17,12 @@ def before_all() -> None:
 def test_get_inference_pool() -> None:
 	model_sources = content_analyser.get_model_options().get('sources')
 
-	with patch('facewaeve.inference_manager.detect_app_context', return_value = 'cli'):
+	with patch('faceweave.inference_manager.detect_app_context', return_value = 'cli'):
 		get_inference_pool('test', model_sources)
 
 		assert isinstance(INFERENCE_POOLS.get('cli').get('test.cpu').get('content_analyser'), InferenceSession)
 
-	with patch('facewaeve.inference_manager.detect_app_context', return_value = 'ui'):
+	with patch('faceweave.inference_manager.detect_app_context', return_value = 'ui'):
 		get_inference_pool('test', model_sources)
 
 		assert isinstance(INFERENCE_POOLS.get('ui').get('test.cpu').get('content_analyser'), InferenceSession)

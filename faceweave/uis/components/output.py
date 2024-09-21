@@ -3,8 +3,8 @@ from typing import Optional
 
 import gradio
 
-from facewaeve import state_manager, wording
-from facewaeve.uis.core import register_ui_component
+from faceweave import state_manager, wording
+from faceweave.uis.core import register_ui_component
 
 OUTPUT_PATH_TEXTBOX : Optional[gradio.Textbox] = None
 OUTPUT_IMAGE : Optional[gradio.Image] = None

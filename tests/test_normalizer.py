@@ -1,4 +1,4 @@
-from facewaeve.normalizer import normalize_fps, normalize_padding
+from faceweave.normalizer import normalize_fps, normalize_padding
 
 
 def test_normalize_padding() -> None:

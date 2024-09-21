@@ -2,12 +2,12 @@ from typing import Tuple
 
 import numpy
 
-from facewaeve import inference_manager
-from facewaeve.download import conditional_download_hashes, conditional_download_sources
-from facewaeve.face_helper import warp_face_by_face_landmark_5
-from facewaeve.filesystem import resolve_relative_path
-from facewaeve.thread_helper import conditional_thread_semaphore
-from facewaeve.typing import Embedding, FaceLandmark5, InferencePool, ModelOptions, ModelSet, VisionFrame
+from faceweave import inference_manager
+from faceweave.download import conditional_download_hashes, conditional_download_sources
+from faceweave.face_helper import warp_face_by_face_landmark_5
+from faceweave.filesystem import resolve_relative_path
+from faceweave.thread_helper import conditional_thread_semaphore
+from faceweave.typing import Embedding, FaceLandmark5, InferencePool, ModelOptions, ModelSet, VisionFrame
 
 MODEL_SET : ModelSet =\
 {
