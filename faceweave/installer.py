@@ -16,7 +16,7 @@ if is_macos():
 	ONNXRUNTIMES['default'] = ('onnxruntime', '1.19.2')
 else:
 	ONNXRUNTIMES['default'] = ('onnxruntime', '1.19.2')
-	ONNXRUNTIMES['cuda'] = ('onnxruntime-gpu', '1.17.1')
+	ONNXRUNTIMES['cuda'] = ('onnxruntime-gpu', '1.19.2')
 	ONNXRUNTIMES['openvino'] = ('onnxruntime-openvino', '1.19.0')
 if is_linux():
 	ONNXRUNTIMES['rocm'] = ('onnxruntime-rocm', '1.18.0')
