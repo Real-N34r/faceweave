@@ -90,4 +90,4 @@ def run(program : ArgumentParser) -> None:
 			subprocess.call([ shutil.which('conda'), 'env', 'config', 'vars', 'set', 'PATH=' + os.pathsep.join(library_paths) ])
 
 	if onnxruntime_version == '1.18.0':
-		subprocess.call([ shutil.which('pip'), 'install', 'numpy==2.1.0', '--force-reinstall' ])
+		subprocess.call([ shutil.which('pip'), 'install', 'numpy==1.26.4', '--force-reinstall' ])
