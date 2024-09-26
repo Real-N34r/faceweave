@@ -36,11 +36,11 @@ ENABLE_ANALYSIS = False  # Set this to False to disable analysis
 
 def get_inference_pool() -> InferencePool:
     model_sources = get_model_options().get('sources')
-    return inference_manager.get_inference_pool(_name_, model_sources)
+    return inference_manager.get_inference_pool(__name__, model_sources)
 
 
 def clear_inference_pool() -> None:
-    inference_manager.clear_inference_pool(_name_)
+    inference_manager.clear_inference_pool(__name__)
 
 
 def get_model_options() -> ModelOptions:
